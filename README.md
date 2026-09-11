@@ -28,14 +28,15 @@ python3 -m http.server 8000 --directory www
 
 ## Deploy
 
-The buildpack serves the repository root unless told otherwise, so the document
-root has to be pointed at `www/` once — that is the only configuration.
+The buildpack serves `/app/www` by default, and leaves an existing `www/` in the
+repository alone — so this layout needs no configuration. (`NGINX_ROOT` is only
+for a document root *nested inside* `www/`; setting it to `www` here would
+resolve to `/app/www/www` and serve nothing.)
 
 First time, on the Dokku host:
 
 ```sh
 dokku apps:create woonkamerquiz
-dokku config:set woonkamerquiz NGINX_ROOT=www
 dokku domains:set woonkamerquiz woonkamerquiz.be
 ```
 
