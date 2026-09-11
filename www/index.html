@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De Quizfabriek</title>
+<meta name="description" content="11.11.2026">
+<meta name="theme-color" content="#10180f">
+<meta name="color-scheme" content="dark">
+
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://woonkamerquiz.be/">
+<meta property="og:site_name" content="De Quizfabriek">
+<meta property="og:title" content="De Quizfabriek">
+<meta property="og:description" content="11.11.2026">
+<meta property="og:image" content="https://woonkamerquiz.be/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="nl_BE">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+  :root {
+    --ink: #10180f;
+    --glow: rgba(122, 185, 108, .22);
+    --gold: #fcc865;
+    --cream: #e9e2cf;
+  }
+
+  * { box-sizing: border-box; }
+
+  /* [hidden] from the UA stylesheet loses to .countdown { display: flex },
+     so state it here where it can win. */
+  [hidden] { display: none !important; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The glow sits in its own layer so it can overflow the viewport without
+     creating scrollbars. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -40%;
+    background: radial-gradient(circle at 50% 42%, var(--glow), transparent 55%);
+    pointer-events: none;
+  }
+
+  main {
+    position: relative;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: clamp(22px, 4vh, 38px);
+    padding: 32px 20px;
+  }
+
+  .logo {
+    /* Portrait mark, so it is sized by height: that is what decides whether
+       the button still fits on one screen. object-fit guards the ratio when
+       max-width takes over on narrow phones. */
+    height: min(52vh, 440px);
+    width: auto;
+    max-width: 72vw;
+    object-fit: contain;
+    display: block;
+  }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: clamp(10px, 3vw, 22px);
+  }
+
+  .countdown div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: clamp(44px, 13vw, 62px);
+  }
+
+  .countdown b {
+    font-size: clamp(28px, 8vw, 44px);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown span {
+    margin-top: 8px;
+    font-size: clamp(8px, 2.2vw, 10px);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    opacity: .55;
+  }
+
+  .cta {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: #17210f;
+    text-decoration: none;
+    max-width: 320px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .cta strong {
+    font-size: clamp(15px, 4vw, 17px);
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+
+  .cta span {
+    font-size: clamp(11px, 3vw, 12px);
+    opacity: .7;
+  }
+
+  .cta:hover,
+  .cta:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(252, 200, 101, .25);
+  }
+
+  .cta:focus-visible {
+    outline: 2px solid var(--cream);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta { transition: none; }
+    .cta:hover, .cta:focus-visible { transform: none; }
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <img class="logo" src="/logo.svg" alt="De Quizfabriek" width="749" height="904">
+
+  <p class="visually-hidden">11 november 2026.</p>
+
+  <!-- Hidden until the script fills it in: without JS a frozen row of zeroes
+       would be worse than no countdown at all. Removed again once we pass the
+       target moment. -->
+  <div class="countdown" id="countdown" hidden aria-hidden="true">
+    <div><b id="days">0</b><span>dagen</span></div>
+    <div><b id="hours">0</b><span>uur</span></div>
+    <div><b id="minutes">0</b><span>min</span></div>
+    <div><b id="seconds">0</b><span>sec</span></div>
+  </div>
+
+  <a class="cta" href="https://tickets.quizfabriek.be/login">
+    <strong>Maak een account</strong>
+    <span>om op de hoogte te blijven</span>
+  </a>
+</main>
+
+<script>
+  (function () {
+    // 11 november 2026, 11:11 Europe/Brussels (CET, UTC+1 — DST has ended).
+    var target = new Date('2026-11-11T11:11:00+01:00').getTime();
+
+    var countdown = document.getElementById('countdown');
+    var fields = {
+      days: document.getElementById('days'),
+      hours: document.getElementById('hours'),
+      minutes: document.getElementById('minutes'),
+      seconds: document.getElementById('seconds')
+    };
+
+    function pad(n) {
+      return n < 10 ? '0' + n : String(n);
+    }
+
+    function tick() {
+      var left = target - Date.now();
+
+      if (left <= 0) {
+        countdown.hidden = true;
+        clearInterval(timer);
+        return;
+      }
+
+      var seconds = Math.floor(left / 1000);
+      fields.days.textContent = Math.floor(seconds / 86400);
+      fields.hours.textContent = pad(Math.floor(seconds / 3600) % 24);
+      fields.minutes.textContent = pad(Math.floor(seconds / 60) % 60);
+      fields.seconds.textContent = pad(seconds % 60);
+      countdown.hidden = false;
+    }
+
+    var timer = setInterval(tick, 1000);
+    tick();
+  })();
+</script>
+
+</body>
+</html>
