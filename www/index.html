@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>De Quizfabriek</title>
-<meta name="description" content="11.11.2026">
+<title>Woonkamerquiz — De gezellige videoquiz voor thuis</title>
+<meta name="description" content="Een winterse videoquiz voor in je eigen zetel, met Wietse en Kim als quizmasters. Binnenkort speelbaar — schrijf je nu in.">
 <meta name="theme-color" content="#10180f">
 <meta name="color-scheme" content="dark">
 
@@ -14,28 +14,32 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://woonkamerquiz.be/">
 <meta property="og:site_name" content="De Quizfabriek">
-<meta property="og:title" content="De Quizfabriek">
-<meta property="og:description" content="11.11.2026">
+<meta property="og:title" content="Woonkamerquiz — De gezellige videoquiz voor thuis">
+<meta property="og:description" content="Een winterse videoquiz voor in je eigen zetel, met Wietse en Kim als quizmasters. Binnenkort speelbaar — schrijf je nu in.">
 <meta property="og:image" content="https://woonkamerquiz.be/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="nl_BE">
 <meta name="twitter:card" content="summary_large_image">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --ink: #10180f;
+    --pine: #1a2617;
+    --pine-line: #2c3a27;
     --glow: rgba(122, 185, 108, .22);
     --gold: #fcc865;
     --cream: #e9e2cf;
+    --cream-dim: rgba(233, 226, 207, .68);
   }
 
   * { box-sizing: border-box; }
-
-  /* [hidden] from the UA stylesheet loses to .countdown { display: flex },
-     so state it here where it can win. */
   [hidden] { display: none !important; }
-
+  html { scroll-behavior: smooth; }
   html, body { height: 100%; }
 
   body {
@@ -44,69 +48,73 @@
     color: var(--cream);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
   }
 
-  /* The glow sits in its own layer so it can overflow the viewport without
-     creating scrollbars. */
+  h1, h2, h3, .wordmark {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-weight: 600;
+    line-height: 1.08;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
   body::before {
     content: "";
     position: fixed;
     inset: -40%;
-    background: radial-gradient(circle at 50% 42%, var(--glow), transparent 55%);
+    background: radial-gradient(circle at 50% 30%, var(--glow), transparent 55%);
     pointer-events: none;
+    z-index: 0;
   }
 
-  main {
+  .wrap {
     position: relative;
-    min-height: 100%;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 22px;
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero {
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: clamp(22px, 4vh, 38px);
-    padding: 32px 20px;
+    gap: clamp(20px, 4vh, 34px);
+    padding: 48px 20px;
   }
 
-  .logo {
-    /* Portrait mark, so it is sized by height: that is what decides whether
-       the button still fits on one screen. object-fit guards the ratio when
-       max-width takes over on narrow phones. */
-    height: min(52vh, 440px);
-    width: auto;
-    max-width: 72vw;
-    object-fit: contain;
+  .wordmark { font-size: clamp(40px, 9vw, 84px); letter-spacing: -0.01em; }
+  .wordmark small {
     display: block;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-weight: 500;
+    font-size: clamp(13px, 2.6vw, 16px);
+    letter-spacing: .04em;
+    color: var(--gold);
+    margin-bottom: 14px;
   }
 
-  .countdown {
-    display: flex;
-    justify-content: center;
-    gap: clamp(10px, 3vw, 22px);
-  }
+  .lede { max-width: 46ch; font-size: clamp(16px, 2.6vw, 19px); color: var(--cream-dim); }
 
-  .countdown div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: clamp(44px, 13vw, 62px);
-  }
-
+  .countdown { display: flex; justify-content: center; gap: clamp(10px, 3vw, 22px); }
+  .countdown div { display: flex; flex-direction: column; align-items: center; min-width: clamp(44px, 13vw, 62px); }
   .countdown b {
-    font-size: clamp(28px, 8vw, 44px);
+    font-size: clamp(26px, 7vw, 38px);
     font-weight: 700;
     line-height: 1;
     color: var(--gold);
     font-variant-numeric: tabular-nums;
+    font-family: "Fraunces", ui-serif, serif;
   }
-
-  .countdown span {
-    margin-top: 8px;
-    font-size: clamp(8px, 2.2vw, 10px);
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    opacity: .55;
-  }
+  .countdown span { margin-top: 8px; font-size: clamp(8px, 2.2vw, 10px); letter-spacing: .14em; text-transform: uppercase; opacity: .55; }
+  .countdown-label { font-size: 13px; color: var(--cream-dim); margin-top: -10px; text-align: center; }
 
   .cta {
     display: inline-flex;
@@ -120,48 +128,133 @@
     max-width: 320px;
     transition: transform .15s ease, box-shadow .15s ease;
   }
+  .cta strong { font-size: clamp(15px, 4vw, 17px); font-weight: 700; }
+  .cta span { font-size: clamp(11px, 3vw, 12px); opacity: .7; }
+  .cta:hover, .cta:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(252, 200, 101, .25); }
 
-  .cta strong {
-    font-size: clamp(15px, 4vw, 17px);
-    font-weight: 700;
-    letter-spacing: .01em;
-  }
+  .cta.ghost { background: transparent; border: 1px solid var(--pine-line); color: var(--cream); padding: 12px 26px; }
+  .cta.ghost:hover, .cta.ghost:focus-visible { box-shadow: none; border-color: var(--gold); }
 
-  .cta span {
-    font-size: clamp(11px, 3vw, 12px);
-    opacity: .7;
-  }
-
-  .cta:hover,
-  .cta:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(252, 200, 101, .25);
-  }
-
-  .cta:focus-visible {
-    outline: 2px solid var(--cream);
-    outline-offset: 4px;
-  }
+  a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; }
 
   @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
     .cta { transition: none; }
     .cta:hover, .cta:focus-visible { transform: none; }
   }
 
-  .visually-hidden {
-    position: absolute;
-    width: 1px; height: 1px;
-    margin: -1px; padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .scroll-hint { font-size: 14px; color: var(--cream-dim); text-decoration: underline; text-underline-offset: 4px; }
+
+  /* ---------- Sections ---------- */
+
+  section { padding: clamp(48px, 9vh, 96px) 0; }
+  section + section { border-top: 1px solid var(--pine-line); }
+
+  .section-head { text-align: center; margin-bottom: clamp(28px, 5vh, 44px); }
+  .section-head p { color: var(--cream-dim); max-width: 52ch; margin: 14px auto 0; }
+  .section-head.left { text-align: left; }
+
+  .prose p { max-width: 62ch; color: var(--cream-dim); }
+  .prose p + p { margin-top: 14px; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+  .feature { background: var(--pine); border: 1px solid var(--pine-line); border-radius: 18px; padding: 24px 22px; }
+  .feature h3 { font-size: 18px; margin-bottom: 8px; }
+  .feature p { color: var(--cream-dim); font-size: 15px; margin: 0; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .steps li { display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: start; }
+  .steps .glyph { font-size: 20px; line-height: 1.4; }
+  .steps h3 { font-size: 16px; margin-bottom: 3px; }
+  .steps p { margin: 0; color: var(--cream-dim); font-size: 15px; }
+
+  .needs { background: var(--pine); border: 1px solid var(--pine-line); border-radius: 18px; padding: 22px 24px; margin-top: 28px; }
+  .needs h3 { font-size: 15px; margin-bottom: 10px; color: var(--gold); }
+  .needs ul { margin: 0; padding-left: 20px; color: var(--cream-dim); }
+  .needs li + li { margin-top: 6px; }
+
+  /* ---------- Carousel ---------- */
+
+  .carousel-wrap { position: relative; padding: 0 44px; }
+  .carousel-track {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 4px;
+    scrollbar-width: none;
   }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-track .slide { flex: 0 0 78%; scroll-snap-align: center; }
+  @media (min-width: 640px) { .carousel-track .slide { flex-basis: 44%; } }
+
+  .slide .frame {
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--pine);
+    border: 1px solid var(--pine-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .slide .frame.is-empty { flex-direction: column; gap: 6px; color: var(--cream-dim); font-size: 13px; padding: 12px; text-align: center; }
+  .slide .frame.is-empty::before { content: "🖼️"; font-size: 22px; }
+  .slide .caption { margin-top: 8px; font-size: 13px; color: var(--cream-dim); text-align: center; }
+
+  .carousel-btn {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--pine);
+    border: 1px solid var(--pine-line);
+    color: var(--cream);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carousel-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .carousel-btn.prev { left: 0; }
+  .carousel-btn.next { right: 0; }
+
+  .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+  .carousel-dots button {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--pine-line); border: none; padding: 0; cursor: pointer;
+  }
+  .carousel-dots button[aria-current="true"] { background: var(--gold); }
+
+  /* ---------- FAQ ---------- */
+
+  .faq details { border-bottom: 1px solid var(--pine-line); padding: 18px 0; }
+  .faq details:first-child { border-top: 1px solid var(--pine-line); }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; font-weight: 500; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: "Fraunces", serif; font-size: 22px; color: var(--gold); flex-shrink: 0; transition: transform .15s ease; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq p { color: var(--cream-dim); margin: 12px 0 0; max-width: 60ch; }
+
+  .closing { text-align: center; }
+  .closing h2 { margin-bottom: 12px; }
+  .closing p { color: var(--cream-dim); max-width: 46ch; margin: 0 auto 26px; }
+
+  footer { padding: 32px 0 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+  .socials { display: flex; gap: 16px; }
+  .socials a { display: inline-flex; opacity: .75; }
+  .socials a:hover, .socials a:focus-visible { opacity: 1; }
+  footer small { color: var(--cream-dim); font-size: 13px; }
 </style>
+
 <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
   _paq.push(["setExcludedQueryParams", ["_ga","_gac","utm_content"]]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
@@ -178,33 +271,212 @@
 </head>
 <body>
 
-<main>
-  <img class="logo" src="/logo.svg" alt="De Quizfabriek" width="749" height="904">
+<!--
+  ============================================================
+  AANPASBARE INSTELLINGEN — verander hier je knoppen, je
+  e-mailadres, de aftelklok en je foto's. Zoek verderop in de
+  code niet verder, dit blok stuurt alles aan.
+  ============================================================
+-->
+<script>
+  const CONFIG = {
+    // E-mailadres waar aanmeldingen naartoe gaan.
+    email: "info@quizfabriek.be",
 
-  <p class="visually-hidden">11 november 2026.</p>
+    // Onderwerp en inhoud van de e-mail die opent. Gewoon leesbare tekst,
+    // geen %-tekens of andere codes nodig — dat regelt de pagina zelf.
+    emailSubject: "Verwittig mij voor de Woonkamerquiz",
+    emailBody: "Hallo,\n\nHou me op de hoogte zodra de Woonkamerquiz speelklaar is!\n\nMijn naam: \nMijn e-mailadres: ",
 
-  <!-- Hidden until the script fills it in: without JS a frozen row of zeroes
-       would be worse than no countdown at all. Removed again once we pass the
-       target moment. -->
-  <div class="countdown" id="countdown" hidden aria-hidden="true">
-    <div><b id="days">0</b><span>dagen</span></div>
-    <div><b id="hours">0</b><span>uur</span></div>
-    <div><b id="minutes">0</b><span>min</span></div>
-    <div><b id="seconds">0</b><span>sec</span></div>
+    // Tekst op de knop bovenaan de pagina (in de hero).
+    ctaMainLabel: "Hou me op de hoogte",
+    ctaMainSubtext: "we sturen een seintje zodra het kan",
+
+    // Tekst op de knop onderaan de pagina.
+    ctaClosingLabel: "Hou me op de hoogte",
+
+    // Aftelklok tonen? Zet op false om hem overal te verbergen.
+    showCountdown: true,
+    // Datum en uur waarnaar afgeteld wordt: jaar-maand-dagTuur:minuut:seconde+01:00
+    // (+01:00 = Belgische wintertijd; gebruik +02:00 als het in de zomer valt).
+    countdownTarget: "2026-11-11T11:11:00+01:00",
+
+    // Foto's voor de carrousel. Voeg gerust een regel toe of verwijder er een
+    // — de carrousel past zich vanzelf aan. Zet je foto's in een map genaamd
+    // "images" naast dit bestand, en verwijs ernaar zoals hieronder.
+    // Laat de lijst leeg (photos: []) om de fotosectie helemaal te verbergen.
+    photos: [
+      { src: "images/foto1.jpg", alt: "Wietse en Kim in de studio", caption: "Wietse en Kim, jullie quizmasters" },
+      { src: "images/foto2.jpg", alt: "Sfeerbeeld van de opnames", caption: "Achter de schermen" },
+      { src: "images/foto3.jpg", alt: "Nog een sfeerbeeld", caption: "" }
+    ]
+  };
+</script>
+
+<main class="hero wrap">
+  <p class="wordmark"><small>De Quizfabriek presenteert</small>Woonkamerquiz</p>
+
+  <p class="lede">Een videoquiz voor in je eigen zetel, met Wietse en Kim als quizmasters. Geen pubquiz-bus nodig — trek een deken over je knieën, zet de tv aan, en daag je huisgenoten, familie of vrienden uit.</p>
+
+  <div>
+    <div class="countdown" id="countdown" hidden aria-hidden="true">
+      <div><b id="days">0</b><span>dagen</span></div>
+      <div><b id="hours">0</b><span>uur</span></div>
+      <div><b id="minutes">0</b><span>min</span></div>
+      <div><b id="seconds">0</b><span>sec</span></div>
+    </div>
+    <p class="countdown-label" id="countdown-caption" hidden>Verwachte lancering</p>
   </div>
 
-  <a class="cta" href="https://tickets.quizfabriek.be/login">
-    <strong>Maak een account</strong>
-    <span>om op de hoogte te blijven</span>
+  <a class="cta" id="ctaMain" href="#">
+    <strong id="ctaMainLabel">Hou me op de hoogte</strong>
+    <span id="ctaMainSubtext">we sturen een seintje zodra het kan</span>
   </a>
+
+  <a class="scroll-hint" href="#concept">Ontdek hoe het werkt</a>
 </main>
 
-<script>
-  (function () {
-    // 11 november 2026, 11:11 Europe/Brussels (CET, UTC+1 — DST has ended).
-    var target = new Date('2026-11-11T11:11:00+01:00').getTime();
+<section id="concept">
+  <div class="wrap prose">
+    <div class="section-head left" style="margin-bottom:22px;">
+      <h2>Wat is de Woonkamerquiz?</h2>
+    </div>
+    <p>De Woonkamerquiz is een pasklare videoquiz die je gewoon thuis speelt, op je eigen tv of laptop. Wietse en Kim nemen je mee doorheen slimme vragen, muziekfragmenten en beeldmateriaal — jij en je ploeg antwoorden via smartphone of tablet. Geen quizmaster aan huis nodig, geen voorbereiding, gewoon plezier in je eigen zetel.</p>
+    <p>Perfect tijdens de koude, donkere maanden: met de feestdagen erbij, maar evengoed op een doordeweekse vrijdagavond. Zodra de Woonkamerquiz speelklaar is, speel je via het QuizWitz-platform — hetzelfde systeem dat we ook gebruiken voor onze feestdagenquiz Quizmas.</p>
+  </div>
+</section>
 
+<section>
+  <div class="wrap">
+    <div class="section-head"><h2>Waarom het werkt</h2></div>
+    <div class="features">
+      <div class="feature">
+        <h3>Thuis in de zetel</h3>
+        <p>Open de quiz op een laptop of pc en koppel aan je televisie voor een groter scherm.</p>
+      </div>
+      <div class="feature">
+        <h3>Voor jong en oud</h3>
+        <p>Vragen die iedereen aanspreken, van tieners tot grootouders — niemand blijft aan de kant staan.</p>
+      </div>
+      <div class="feature">
+        <h3>Zonder gedoe</h3>
+        <p>Geen pennen, geen bestanden, geen voorbereiding. Gewoon starten en spelen wanneer het jou uitkomt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fotos" hidden>
+  <div class="wrap">
+    <div class="section-head"><h2>In beeld</h2></div>
+    <div class="carousel-wrap">
+      <button class="carousel-btn prev" id="carouselPrev" aria-label="Vorige foto">‹</button>
+      <div class="carousel-track" id="carouselTrack"></div>
+      <button class="carousel-btn next" id="carouselNext" aria-label="Volgende foto">›</button>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head left"><h2>Hoe zal het werken?</h2></div>
+    <ol class="steps">
+      <li><span class="glyph">✉️</span><div><h3>Meld je aan</h3><p>Laat hieronder je e-mailadres achter, dan verwittigen we je zodra de Woonkamerquiz speelklaar is.</p></div></li>
+      <li><span class="glyph">🔗</span><div><h3>Je ontvangt een link</h3><p>Open die op je laptop of pc — geen account of installatie nodig.</p></div></li>
+      <li><span class="glyph">📺</span><div><h3>Zet je scherm klaar</h3><p>Sluit aan op de televisie zodat iedereen mee kan kijken, en verbind elke ploeg met een smartphone of tablet.</p></div></li>
+      <li><span class="glyph">🎬</span><div><h3>Druk op start</h3><p>Wietse en Kim komen je begroeten, en de vragen beginnen te rollen.</p></div></li>
+      <li><span class="glyph">🏆</span><div><h3>Vier de winnaar</h3><p>Aan het einde weet je voorgoed wie de quizkampioen is in huis.</p></div></li>
+    </ol>
+
+    <div class="needs">
+      <h3>Wat heb je nodig?</h3>
+      <ul>
+        <li>Een pc of laptop om de quiz te tonen (koppel aan je tv voor een groter scherm)</li>
+        <li>Minstens één smartphone of tablet per ploeg of deelnemer</li>
+        <li>Een internetverbinding</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap prose">
+    <div class="section-head left" style="margin-bottom:22px;"><h2>Wie zijn wij</h2></div>
+    <p>De Woonkamerquiz is een productie van De Quizfabriek, een Gentse vzw actief in quizzen sinds 2015. Wat begon als een vierkoppig team is ondertussen uitgegroeid tot een ploeg van tien nieuwsgierige en creatieve quizmakers, die samen quizzen organiseren voor openbare quizavonden, teambuildings en evenementen.</p>
+    <p>Voor de Woonkamerquiz nemen Wietse en Kim de honneurs waar: jouw gastheer en gastvrouw voor een avond vol vragen, muziek en gezelligheid, rechtstreeks je woonkamer in.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head"><h2>Veelgestelde vragen</h2></div>
+    <div class="faq">
+      <details>
+        <summary>Wanneer is de Woonkamerquiz klaar?</summary>
+        <p>We zijn volop bezig met opnemen en afwerken. Meld je aan met je e-mailadres en je bent de eerste die het hoort zodra alles speelklaar is.</p>
+      </details>
+      <details>
+        <summary>Is dit enkel voor de feestdagen?</summary>
+        <p>Nee. De Woonkamerquiz is winters en gezellig, maar je speelt hem wanneer je zelf wil — met de feestdagen, of op eender welke koude avond.</p>
+      </details>
+      <details>
+        <summary>Is dit hetzelfde als Quizmas?</summary>
+        <p>Zelfde soort concept en platform (QuizWitz), maar een andere quiz met een ander thema en met Wietse en Kim als quizmasters in plaats van het Quizmas-team.</p>
+      </details>
+      <details>
+        <summary>Moet ik nu al iets betalen?</summary>
+        <p>Nee. Je laat gewoon je e-mailadres achter, zonder verplichtingen. Zodra de quiz klaar is, laten we weten hoe je hem kan spelen.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>Als eerste weten wanneer het kan?</h2>
+    <p>Laat je e-mailadres achter en wij verwittigen je zodra de Woonkamerquiz speelklaar is.</p>
+    <a class="cta ghost" id="ctaClosing" href="#">
+      <strong id="ctaClosingLabel">Hou me op de hoogte</strong>
+    </a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="socials">
+    <a href="https://www.facebook.com/quizfabriek" aria-label="Volg ons op Facebook">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 8.5h2V5.4c-.35-.05-1.54-.15-2.93-.15-2.9 0-4.89 1.83-4.89 5.2v2.8H6.5V17h2.68v7h3.39v-7h2.58l.41-3.75h-2.99v-2.44c0-1.08.29-1.81 1.93-1.81Z" fill="currentColor"/></svg>
+    </a>
+    <a href="https://www.instagram.com/quizfabriek" aria-label="Volg ons op Instagram">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="1.6"/><circle cx="17.1" cy="6.9" r="1.1" fill="currentColor"/></svg>
+    </a>
+  </div>
+  <small>© Woonkamerquiz is een productie van <a href="https://www.quizfabriek.be" style="text-decoration:underline;">De Quizfabriek</a>. Alle rechten voorbehouden.</small>
+</footer>
+
+<script>
+  // ---------- Knoppen & e-mailadres invullen op basis van CONFIG ----------
+  (function applyConfig() {
+    document.getElementById('ctaMainLabel').textContent = CONFIG.ctaMainLabel;
+    document.getElementById('ctaMainSubtext').textContent = CONFIG.ctaMainSubtext;
+    document.getElementById('ctaClosingLabel').textContent = CONFIG.ctaClosingLabel;
+
+    var mailto = 'mailto:' + CONFIG.email
+      + '?subject=' + encodeURIComponent(CONFIG.emailSubject)
+      + '&body=' + encodeURIComponent(CONFIG.emailBody);
+
+    document.getElementById('ctaMain').href = mailto;
+    document.getElementById('ctaClosing').href = mailto;
+  })();
+
+  // ---------- Aftelklok ----------
+  (function initCountdown() {
     var countdown = document.getElementById('countdown');
+    var caption = document.getElementById('countdown-caption');
+
+    if (!CONFIG.showCountdown) return;
+
+    var target = new Date(CONFIG.countdownTarget).getTime();
     var fields = {
       days: document.getElementById('days'),
       hours: document.getElementById('hours'),
@@ -212,29 +484,101 @@
       seconds: document.getElementById('seconds')
     };
 
-    function pad(n) {
-      return n < 10 ? '0' + n : String(n);
-    }
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
 
     function tick() {
       var left = target - Date.now();
-
       if (left <= 0) {
         countdown.hidden = true;
+        caption.hidden = true;
         clearInterval(timer);
         return;
       }
-
       var seconds = Math.floor(left / 1000);
       fields.days.textContent = Math.floor(seconds / 86400);
       fields.hours.textContent = pad(Math.floor(seconds / 3600) % 24);
       fields.minutes.textContent = pad(Math.floor(seconds / 60) % 60);
       fields.seconds.textContent = pad(seconds % 60);
       countdown.hidden = false;
+      caption.hidden = false;
     }
 
     var timer = setInterval(tick, 1000);
     tick();
+  })();
+
+  // ---------- Fotocarrousel, opgebouwd uit CONFIG.photos ----------
+  (function initCarousel() {
+    var photos = CONFIG.photos || [];
+    var section = document.getElementById('fotos');
+    if (photos.length === 0) { return; }
+    section.hidden = false;
+
+    var track = document.getElementById('carouselTrack');
+    var dotsWrap = document.getElementById('carouselDots');
+    var prevBtn = document.getElementById('carouselPrev');
+    var nextBtn = document.getElementById('carouselNext');
+
+    photos.forEach(function (photo, i) {
+      var slide = document.createElement('div');
+      slide.className = 'slide';
+
+      var frame = document.createElement('div');
+      frame.className = 'frame';
+
+      var img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = photo.alt || '';
+      img.loading = 'lazy';
+      img.onerror = function () {
+        frame.classList.add('is-empty');
+        frame.textContent = 'Foto ontbreekt: ' + photo.src;
+        img.remove();
+      };
+      frame.appendChild(img);
+      slide.appendChild(frame);
+
+      if (photo.caption) {
+        var caption = document.createElement('p');
+        caption.className = 'caption';
+        caption.textContent = photo.caption;
+        slide.appendChild(caption);
+      }
+
+      track.appendChild(slide);
+
+      var dot = document.createElement('button');
+      dot.setAttribute('aria-label', 'Ga naar foto ' + (i + 1));
+      dot.addEventListener('click', function () { goTo(i); });
+      dotsWrap.appendChild(dot);
+    });
+
+    var dots = dotsWrap.querySelectorAll('button');
+
+    function updateDots() {
+      var slideWidth = track.children[0].getBoundingClientRect().width + 14;
+      var index = Math.round(track.scrollLeft / slideWidth);
+      dots.forEach(function (d, i) { d.setAttribute('aria-current', i === index ? 'true' : 'false'); });
+    }
+
+    function goTo(index) {
+      var slideWidth = track.children[0].getBoundingClientRect().width + 14;
+      track.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+    }
+
+    prevBtn.addEventListener('click', function () {
+      track.scrollBy({ left: -(track.children[0].getBoundingClientRect().width + 14), behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', function () {
+      track.scrollBy({ left: track.children[0].getBoundingClientRect().width + 14, behavior: 'smooth' });
+    });
+
+    track.addEventListener('scroll', function () {
+      window.clearTimeout(track._t);
+      track._t = window.setTimeout(updateDots, 80);
+    });
+
+    updateDots();
   })();
 </script>
 
