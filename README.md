@@ -10,7 +10,10 @@ www/
   logo.svg            De Quizfabriek, viewBox trimmed to the artwork
   og.png              1200x630 share preview
   apple-touch-icon.png
-.buildpacks           dokku/heroku-buildpack-nginx
+  CNAME               custom domain, must ship inside the Pages artifact
+.github/workflows/
+  pages.yml           publishes www/ to GitHub Pages on push to main
+.buildpacks           dokku/heroku-buildpack-nginx (fallback host)
 .static               marks this as a static app for Dokku's detection
 ```
 
@@ -28,48 +31,57 @@ python3 -m http.server 8000 --directory www
 
 ## Deploy
 
-The buildpack serves `/app/www` by default, and leaves an existing `www/` in the
-repository alone — so this layout needs no configuration. (`NGINX_ROOT` is only
-for a document root *nested inside* `www/`; setting it to `www` here would
-resolve to `/app/www/www` and serve nothing.)
+GitHub Actions publishes `www/` to GitHub Pages on every push to `main`
+(`.github/workflows/pages.yml`), and can be re-run by hand from the Actions tab.
+There are no deploy credentials: `deploy-pages` authenticates with an OIDC token
+minted during the run, so there is no key to leak or rotate.
 
-First time, on the Dokku host:
+`www/CNAME` holds the custom domain. It has to stay inside `www/` -- the domain
+is only preserved if the CNAME ships in the uploaded artifact.
+
+Pages does not serve a private repository on a free plan, so this repository is
+public.
+
+### Cutover
+
+The domain is proxied through Cloudflare, with Dokku as the origin. Pages is not
+live until DNS moves:
+
+1. Merge, and confirm the Pages deploy is green and the `github.io` URL serves
+   the page.
+2. In Cloudflare, replace the origin A records for `woonkamerquiz.be` with the
+   GitHub Pages addresses -- `185.199.108.153`, `185.199.109.153`,
+   `185.199.110.153`, `185.199.111.153` -- and point `www` at
+   `<owner>.github.io`.
+3. Set those records to DNS-only (grey cloud). GitHub cannot issue its
+   certificate through the Cloudflare proxy.
+4. Wait for the certificate, then tick **Enforce HTTPS** in the repository's
+   Pages settings.
+5. Re-enable the Cloudflare proxy if you want it, with SSL mode **Full**.
+
+Until step 2, the live site is still served by Dokku.
+
+### Dokku (previous host, kept as fallback)
+
+`.buildpacks` and `.static` are still here, so `git push dokku main` works if
+Pages is ever unavailable. The buildpack serves `/app/www` by default and leaves
+an existing `www/` alone, so this layout needs no configuration. (`NGINX_ROOT`
+is only for a document root *nested inside* `www/`; setting it to `www` here
+would resolve to `/app/www/www` and serve nothing.)
 
 ```sh
 dokku apps:create woonkamerquiz
 dokku domains:set woonkamerquiz woonkamerquiz.be
-```
-
-From this repo:
-
-```sh
 git remote add dokku dokku@<dokku-host>:woonkamerquiz
 git push dokku main
 ```
 
-Then, once DNS points at the host:
+TLS on the Dokku side, if you ever fall back to it:
 
 ```sh
 dokku letsencrypt:set woonkamerquiz email <you>@example.com
 dokku letsencrypt:enable woonkamerquiz
 ```
 
-Every later deploy is automatic: `.github/workflows/deploy.yml` pushes `main` to
-Dokku on every push, and can be re-run by hand from the Actions tab. It needs
-two repository settings, both already in place:
-
-| Setting | Kind | What it is |
-| --- | --- | --- |
-| `DOKKU_SSH_KEY` | secret | private half of a deploy-only ed25519 keypair, authorized on the host with `dokku ssh-keys:add` |
-| `DOKKU_KNOWN_HOSTS` | variable | the host's pinned ed25519 line, so the runner verifies who it is talking to |
-
-A manual `git push dokku main` still works and is the fallback if Actions is
-down.
-
-Two things to know if you touch the workflow. The checkout needs
-`fetch-depth: 0` — Dokku refuses a shallow push. And a manual re-run against an
-unchanged commit is a no-op, because Dokku only rebuilds when it receives a new
-commit; to force a rebuild, run `dokku ps:rebuild woonkamerquiz` on the host.
-
-The deploy key is not scoped to this app. Dokku grants a key access to every app
-on the host, so treat `DOKKU_SSH_KEY` as host-wide credentials.
+Once the Pages cutover is done and settled, this section and the two buildpack
+files can go.
