@@ -1,0 +1,41 @@
+name: Deploy to Dokku
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Dokku's git receiver handles one push at a time; never let two deploys race,
+# and never cancel one midway through a build.
+concurrency:
+  group: dokku-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Dokku rejects a shallow push ("shallow update not allowed"),
+          # so the full history is required here.
+          fetch-depth: 0
+
+      - name: Configure SSH
+        env:
+          DOKKU_SSH_KEY: ${{ secrets.DOKKU_SSH_KEY }}
+          DOKKU_KNOWN_HOSTS: ${{ vars.DOKKU_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$DOKKU_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$DOKKU_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Push to Dokku
+        run: |
+          git remote add dokku dokku@fra001.apps.catlab.eu:woonkamerquiz
+          git push dokku HEAD:refs/heads/main
