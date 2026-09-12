@@ -1,8 +1,8 @@
 # woonkamerquiz.be
 
 Teaser landing page for De Quizfabriek. Static: one HTML file with inline CSS
-and JS, a vector logo, and a share image. No build step, no dependencies, no
-third-party requests.
+and JS, a vector logo, and a share image. No build step and no dependencies.
+The only external request is the Matomo tracker on `stats.catlab.eu`.
 
 ```
 www/
@@ -13,8 +13,7 @@ www/
   CNAME               custom domain, must ship inside the Pages artifact
 .github/workflows/
   pages.yml           publishes www/ to GitHub Pages on push to main
-.buildpacks           dokku/heroku-buildpack-nginx (fallback host)
-.static               marks this as a static app for Dokku's detection
+CLAUDE.md             notes for anyone (or anything) editing this repo
 ```
 
 The countdown runs to **11 November 2026, 11:11 Europe/Brussels**, hardcoded in
@@ -29,66 +28,41 @@ python3 -m http.server 8000 --directory www
 # http://localhost:8000
 ```
 
+## Analytics
+
+Matomo, self-hosted on `stats.catlab.eu`, site id 41, in the `<head>` of
+`www/index.html`. It is the one third-party request the page makes.
+
 ## Deploy
 
 GitHub Actions publishes `www/` to GitHub Pages on every push to `main`
 (`.github/workflows/pages.yml`), and can be re-run by hand from the Actions tab.
 There are no deploy credentials: `deploy-pages` authenticates with an OIDC token
-minted during the run, so there is no key to leak or rotate.
+minted during the run, so there is nothing to leak or rotate.
 
-`www/CNAME` holds the custom domain. It has to stay inside `www/` -- the domain
-is only preserved if the CNAME ships in the uploaded artifact.
+`www/CNAME` holds the custom domain. It has to stay inside `www/` -- Pages only
+keeps the domain if the CNAME ships in the uploaded artifact.
 
 Both `woonkamerquiz.be` and `www.woonkamerquiz.be` work. Pages serves whichever
-is in `CNAME` and permanently redirects the other to it, so the apex is
-canonical and `www` redirects to it. Swapping the direction means changing
-`CNAME`, not the DNS. (Today both hostnames answer `200` independently, which
-is duplicate content with no canonical -- the redirect is an improvement.)
-The certificate GitHub issues covers both.
+hostname is in `CNAME` and permanently redirects the other to it, so the apex is
+canonical and `www` redirects to it. Swapping the direction means editing
+`CNAME`, not DNS. The certificate GitHub issues covers both.
 
 Pages does not serve a private repository on a free plan, so this repository is
 public.
 
-### Cutover
+### DNS
 
-The domain is proxied through Cloudflare, with Dokku as the origin. Pages is not
-live until DNS moves:
+Cloudflare fronts the domain, with GitHub Pages as the origin.
 
-1. Merge, and confirm the Pages deploy is green and the `github.io` URL serves
-   the page.
-2. In Cloudflare, replace the origin A records for `woonkamerquiz.be` with the
-   GitHub Pages addresses -- `185.199.108.153`, `185.199.109.153`,
-   `185.199.110.153`, `185.199.111.153` -- and add a CNAME for `www` pointing
-   at `daedeloth.github.io` (the user, not the repository path).
-3. Set both records to DNS-only (grey cloud). GitHub cannot issue its
-   certificate through the Cloudflare proxy.
-4. Wait for the certificate, then tick **Enforce HTTPS** in the repository's
-   Pages settings.
-5. Re-enable the Cloudflare proxy if you want it, with SSL mode **Full**.
+| Record | Value |
+| --- | --- |
+| `woonkamerquiz.be` A | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` |
+| `www` CNAME | `daedeloth.github.io` |
 
-Until step 2, the live site is still served by Dokku.
+All four A records, not one: browsers fail over to the next address only if it
+was published, so a single record is a single point of failure for no saving.
 
-### Dokku (previous host, kept as fallback)
-
-`.buildpacks` and `.static` are still here, so `git push dokku main` works if
-Pages is ever unavailable. The buildpack serves `/app/www` by default and leaves
-an existing `www/` alone, so this layout needs no configuration. (`NGINX_ROOT`
-is only for a document root *nested inside* `www/`; setting it to `www` here
-would resolve to `/app/www/www` and serve nothing.)
-
-```sh
-dokku apps:create woonkamerquiz
-dokku domains:set woonkamerquiz woonkamerquiz.be
-git remote add dokku dokku@<dokku-host>:woonkamerquiz
-git push dokku main
-```
-
-TLS on the Dokku side, if you ever fall back to it:
-
-```sh
-dokku letsencrypt:set woonkamerquiz email <you>@example.com
-dokku letsencrypt:enable woonkamerquiz
-```
-
-Once the Pages cutover is done and settled, this section and the two buildpack
-files can go.
+If the certificate ever has to be reissued, set those records to DNS-only (grey
+cloud) first -- GitHub cannot complete the challenge through the Cloudflare
+proxy -- then re-enable the proxy with SSL mode **Full**.
