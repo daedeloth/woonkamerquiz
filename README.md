@@ -54,4 +54,22 @@ dokku letsencrypt:set woonkamerquiz email <you>@example.com
 dokku letsencrypt:enable woonkamerquiz
 ```
 
-Every later deploy is just `git push dokku main`.
+Every later deploy is automatic: `.github/workflows/deploy.yml` pushes `main` to
+Dokku on every push, and can be re-run by hand from the Actions tab. It needs
+two repository settings, both already in place:
+
+| Setting | Kind | What it is |
+| --- | --- | --- |
+| `DOKKU_SSH_KEY` | secret | private half of a deploy-only ed25519 keypair, authorized on the host with `dokku ssh-keys:add` |
+| `DOKKU_KNOWN_HOSTS` | variable | the host's pinned ed25519 line, so the runner verifies who it is talking to |
+
+A manual `git push dokku main` still works and is the fallback if Actions is
+down.
+
+Two things to know if you touch the workflow. The checkout needs
+`fetch-depth: 0` — Dokku refuses a shallow push. And a manual re-run against an
+unchanged commit is a no-op, because Dokku only rebuilds when it receives a new
+commit; to force a rebuild, run `dokku ps:rebuild woonkamerquiz` on the host.
+
+The deploy key is not scoped to this app. Dokku grants a key access to every app
+on the host, so treat `DOKKU_SSH_KEY` as host-wide credentials.
