@@ -39,6 +39,13 @@ minted during the run, so there is no key to leak or rotate.
 `www/CNAME` holds the custom domain. It has to stay inside `www/` -- the domain
 is only preserved if the CNAME ships in the uploaded artifact.
 
+Both `woonkamerquiz.be` and `www.woonkamerquiz.be` work. Pages serves whichever
+is in `CNAME` and permanently redirects the other to it, so the apex is
+canonical and `www` redirects to it. Swapping the direction means changing
+`CNAME`, not the DNS. (Today both hostnames answer `200` independently, which
+is duplicate content with no canonical -- the redirect is an improvement.)
+The certificate GitHub issues covers both.
+
 Pages does not serve a private repository on a free plan, so this repository is
 public.
 
@@ -51,9 +58,9 @@ live until DNS moves:
    the page.
 2. In Cloudflare, replace the origin A records for `woonkamerquiz.be` with the
    GitHub Pages addresses -- `185.199.108.153`, `185.199.109.153`,
-   `185.199.110.153`, `185.199.111.153` -- and point `www` at
-   `<owner>.github.io`.
-3. Set those records to DNS-only (grey cloud). GitHub cannot issue its
+   `185.199.110.153`, `185.199.111.153` -- and add a CNAME for `www` pointing
+   at `daedeloth.github.io` (the user, not the repository path).
+3. Set both records to DNS-only (grey cloud). GitHub cannot issue its
    certificate through the Cloudflare proxy.
 4. Wait for the certificate, then tick **Enforce HTTPS** in the repository's
    Pages settings.
