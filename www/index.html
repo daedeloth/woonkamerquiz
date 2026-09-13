@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Woonkamerquiz — De gezellige videoquiz voor thuis</title>
-<meta name="description" content="Een speelse videoquiz voor in je eigen zetel. Binnenkort speelbaar — schrijf je nu in.">
+<meta name="description" content="Een speelse videoquiz voor in je eigen zetel. Binnenkort speelbaar, schrijf je nu in.">
 <meta name="theme-color" content="#2b1f1a">
 <meta name="color-scheme" content="dark">
 
@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://woonkamerquiz.be/">
 <meta property="og:site_name" content="De Quizfabriek">
 <meta property="og:title" content="Woonkamerquiz — De gezellige videoquiz voor thuis">
-<meta property="og:description" content="Een speelse videoquiz voor in je eigen zetel. Binnenkort speelbaar — schrijf je nu in.">
+<meta property="og:description" content="Een speelse videoquiz voor in je eigen zetel. Binnenkort speelbaar, schrijf je nu in.">
 <meta property="og:image" content="https://woonkamerquiz.be/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -36,6 +36,7 @@
     --coral: #e8674c;
     --cream: #f5ead9;
     --cream-dim: rgba(245, 234, 217, .68);
+    --navh: 60px;
   }
 
   * { box-sizing: border-box; }
@@ -45,6 +46,7 @@
 
   body {
     margin: 0;
+    padding-top: var(--navh);
     background: var(--room);
     color: var(--cream);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -71,6 +73,60 @@
   }
 
   .wrap { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; padding: 0 22px; }
+
+  /* ---------- Topnav: blijft vast bij scrollen ---------- */
+
+  .topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    height: var(--navh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, 2vw, 14px);
+    padding: 0 14px;
+    background: rgba(43, 31, 26, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent;
+    transition: background-color .25s ease, backdrop-filter .25s ease, border-color .25s ease;
+  }
+  .topnav.is-scrolled {
+    background: rgba(43, 31, 26, .86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom-color: var(--panel-line);
+  }
+
+  .topnav-link {
+    font-family: "Baloo 2", ui-rounded, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(11.5px, 2.8vw, 15px);
+    line-height: 1.1;
+    color: var(--cream);
+    text-decoration: none;
+    padding: 9px clamp(10px, 2.6vw, 16px);
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: background-color .15s ease;
+  }
+  .topnav-link:hover, .topnav-link:focus-visible { background: var(--panel); }
+
+  /* "Speel nu": start als gewone navlink, vult geleidelijk rood in
+     naarmate je verder naar beneden scrolt (via --play-progress, JS). */
+  .topnav-link.is-play {
+    --play-progress: 0;
+    background-color: color-mix(in srgb, var(--coral) calc(var(--play-progress) * 100%), transparent);
+    color: color-mix(in srgb, #2b1006 calc(var(--play-progress) * 100%), var(--cream));
+  }
+  .topnav-link.is-play:hover, .topnav-link.is-play:focus-visible {
+    background-color: color-mix(in srgb, var(--coral) calc(max(var(--play-progress), .35) * 100%), transparent);
+  }
+
+  @media (max-width: 420px) {
+    .topnav-link { padding: 8px 10px; }
+  }
 
   /* ---------- Hero: kort en krachtig ---------- */
 
@@ -188,6 +244,7 @@
 
   /* ---------- FAQ, kort ---------- */
 
+  #faq { scroll-margin-top: var(--navh); }
   .faq details { border-bottom: 1px solid var(--panel-line); padding: 16px 0; }
   .faq details:first-child { border-top: 1px solid var(--panel-line); }
   .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; font-weight: 600; }
@@ -264,6 +321,12 @@
   };
 </script>
 
+<nav class="topnav" id="topnav">
+  <a class="topnav-link" href="https://www.quizfabriek.be" target="_blank" rel="noopener">De Quizfabriek</a>
+  <a class="topnav-link is-play" id="navPlay" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3">Speel nu</a>
+  <a class="topnav-link" href="#faq">Veelgestelde vragen</a>
+</nav>
+
 <main class="hero wrap">
   <div class="hero-in">
     <div id="heroLogo"></div>
@@ -316,7 +379,7 @@
   </div>
 </section>
 
-<section>
+<section id="faq">
   <div class="wrap">
     <div class="section-head"><h2>Vragen?</h2></div>
     <div class="faq">
@@ -394,6 +457,31 @@
 
     document.getElementById('ctaMain').href = CONFIG.newsletterUrl;
     document.getElementById('ctaClosing').href = CONFIG.newsletterUrl;
+    document.getElementById('navPlay').href = CONFIG.newsletterUrl;
+  })();
+
+  (function initTopNav() {
+    var nav = document.getElementById('topnav');
+    var playLink = document.getElementById('navPlay');
+    var fillDistance = 220; // px scroll-afstand waarover "Speel nu" geleidelijk rood wordt
+    var ticking = false;
+
+    function update() {
+      var y = window.scrollY || window.pageYOffset || 0;
+      nav.classList.toggle('is-scrolled', y > 4);
+      var progress = Math.max(0, Math.min(1, y / fillDistance));
+      playLink.style.setProperty('--play-progress', progress);
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    update();
   })();
 
   (function initCountdown() {
