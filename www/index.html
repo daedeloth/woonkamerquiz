@@ -24,7 +24,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -191,28 +191,22 @@
   .hero-title { font-size: clamp(38px, 10vw, 78px); font-weight: 800; letter-spacing: -0.015em; max-width: 14ch; }
   .hero-logo-img { max-width: min(300px, 68vw); height: auto; display: block; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
 
-  .hero-sub { max-width: 38ch; font-size: clamp(17px, 3vw, 20px); color: var(--cream-dim); }
-
-  /* Stappen naast elkaar, met pijltjes ertussen */
-  .steps-row { display: flex; align-items: flex-start; justify-content: center; gap: 8px; flex-wrap: wrap; }
-  .step { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 130px; }
-  .step:nth-child(1) { transform: rotate(-2deg); }
-  .step:nth-child(3) { transform: rotate(1.5deg); }
-  .step:nth-child(5) { transform: rotate(-1.5deg); }
+  /* Stappen naast elkaar, met pijltjes ertussen. Wordt volledig door JS opgebouwd
+     op basis van CONFIG.steps, dus dit schaalt automatisch mee met elk aantal stappen. */
+  .steps-row { display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; row-gap: 18px; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 132px; }
   .step-num {
-    font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 30px; line-height: 1;
-    color: transparent; -webkit-text-stroke: 1.3px var(--amber);
+    font-family: "Caveat", "Baloo 2", cursive; font-weight: 700; font-size: 46px; line-height: .8;
+    color: var(--amber);
   }
   .step p { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--cream); line-height: 1.3; }
-  .step-arrow { position: relative; align-self: center; margin-top: 12px; font-size: 19px; color: var(--amber); }
-  .step-arrow::after { content: "❄"; position: absolute; top: -9px; right: -7px; font-size: 8px; color: var(--frost); opacity: .85; }
+  .step-arrow { display: inline-flex; align-items: center; justify-content: center; color: var(--amber); flex-shrink: 0; }
+  .step-arrow svg { display: block; overflow: visible; }
   @media (max-width: 560px) {
-    .steps-row { flex-direction: column; gap: 14px; }
+    .steps-row { flex-direction: column; gap: 6px; }
     .step { transform: none !important; }
-    .step-arrow { transform: rotate(90deg); margin: 0; }
+    .step-arrow { transform: rotate(90deg) !important; margin: 2px 0; }
   }
-
-  .steps-note { font-size: 13.5px; color: var(--cream-dim); max-width: 52ch; }
 
   .countdown { display: flex; justify-content: center; gap: 16px; }
   .countdown div { display: flex; flex-direction: column; align-items: center; min-width: 48px; }
@@ -379,7 +373,7 @@
     newsletterUrl: "https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&optins=3",
 
     ctaMainLabel: "Hou me op de hoogte",
-    ctaMainSubtext: "we mailen je zodra het kan",
+    ctaMainSubtext: "we sturen een berichtje als je de quiz kan spelen",
     ctaClosingLabel: "Hou me op de hoogte",
 
     // PLACEHOLDER-video die nu op de achtergrond van de hero afspeelt (automatisch, geluidloos, in
@@ -392,9 +386,16 @@
     // toont in plaats daarvan "Quizfabriek presenteert" + de titel als tekst.
     logo: { src: "", alt: "Woonkamerquiz" },
 
-    // Titel en subtekst, gebruikt als er geen logo-afbeelding is ingesteld. <br> mag voor een regelafbreking.
-    heroTitle: "Maak van je woonkamer<br>een quizavond.",
-    heroSub: "Zet 'm op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Wietse en Kim doen de rest.",
+    // Titel, gebruikt als er geen logo-afbeelding is ingesteld. <br> mag voor een regelafbreking.
+    heroTitle: "Woonkamerquiz",
+
+    // De stappen onder de titel. Voeg gerust een regel toe of verwijder er een — de nummering
+    // en de pijltjes ertussen worden automatisch mee opgebouwd, in eender welke lengte.
+    steps: [
+      "Open de quiz op je tv of laptop",
+      "Scan per ploeg de QR-code op je gsm",
+      "Speel de quiz"
+    ],
 
     // Groot sfeerbeeld verderop op de pagina, met een korte vignette eronder.
     sfeerImage: { src: "images/sfeer.jpg", alt: "Sfeerbeeld van een quizavond thuis" },
@@ -435,16 +436,12 @@
     <div class="hero-in">
       <div class="brand" id="heroBrand"></div>
 
-      <p class="hero-sub" id="heroSub"></p>
+      <div class="steps-row" id="stepsRow"></div>
 
-      <div class="steps-row">
-        <div class="step"><span class="step-num">01</span><p>Zet de quiz op je tv of laptop</p></div>
-        <span class="step-arrow" aria-hidden="true">→</span>
-        <div class="step"><span class="step-num">02</span><p>Neem er een gsm per ploeg bij</p></div>
-        <span class="step-arrow" aria-hidden="true">→</span>
-        <div class="step"><span class="step-num">03</span><p>Speel. Wietse en Kim doen de rest</p></div>
-      </div>
-      <p class="steps-note">Je hebt er geen quizmaster of voorbereiding voor nodig, gewoon een tv, een gsm per ploeg en een avond tijd.</p>
+      <a class="cta" id="ctaMain" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3">
+        <strong id="ctaMainLabel">Hou me op de hoogte</strong>
+        <span id="ctaMainSubtext">we mailen je zodra het kan</span>
+      </a>
 
       <div>
         <div class="countdown" id="countdown" hidden aria-hidden="true">
@@ -456,14 +453,33 @@
         <p class="countdown-label" id="countdown-caption" hidden>Verwachte lancering</p>
       </div>
 
-      <a class="cta" id="ctaMain" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3">
-        <strong id="ctaMainLabel">Hou me op de hoogte</strong>
-        <span id="ctaMainSubtext">we mailen je zodra het kan</span>
-      </a>
-
       <a class="scroll-hint" href="#sfeer">Benieuwd hoe dat eruitziet?</a>
     </div>
   </header>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2 class="section-title">Vragen?</h2>
+      <div class="faq">
+        <details>
+          <summary>Voor wie is de woonkamerquiz?</summary>
+          <p>Voor werkelijk iedereen! Van jong tot oud, van ervaren quizzer of nieuweling!</p>
+        </details>
+        <details>
+          <summary>Is deze quiz moeilijk?</summary>
+          <p>De quiz wil gezinnen en vriendegroepen een fijne avond bezorgen, de vragen zijn daarom bewust zeer toegankelijk gehouden.</p>
+        </details>
+        <details>
+          <summary>Is dit enkel voor tijdens de feestdagen?</summary>
+          <p>Nee. Winters en gezellig, maar je speelt hem wanneer je zelf wil.</p>
+        </details>
+        <details>
+          <summary>Moet ik nu al iets betalen?</summary>
+          <p>Nee. Je laat gewoon je e-mailadres achter, zonder verplichtingen.</p>
+        </details>
+      </div>
+    </div>
+  </section>
 
   <section class="sfeer" id="sfeer" aria-label="Sfeerbeeld">
     <div class="media-frame sfeer-media" id="sfeerMedia"></div>
@@ -504,30 +520,6 @@
         <button class="carousel-btn next" id="carouselNext" aria-label="Volgende foto">›</button>
       </div>
       <div class="carousel-dots" id="carouselDots"></div>
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="wrap">
-      <h2 class="section-title">Vragen?</h2>
-      <div class="faq">
-        <details>
-          <summary>Voor wie is de woonkamerquiz?</summary>
-          <p>Jong, oud, voor iedereen! De quiz is zo opgesteld dat echt iedereen wel iets weet en plezier aan de vragen beleeft.</p>
-        </details>
-        <details>
-          <summary>Is deze quiz moeilijk?</summary>
-          <p>Niet echt. De quiz wil gezinnen en vriendengroepen een fijne avond bezorgen, we hebben daarom de vragen bewust zeer toegankelijk gehouden.</p>
-        </details>
-        <details>
-          <summary>Is dit enkel voor de feestdagen?</summary>
-          <p>Nee. Winters en gezellig, maar je speelt hem wanneer je zelf wil.</p>
-        </details>
-        <details>
-          <summary>Moet ik nu al iets betalen?</summary>
-          <p>Nee. Je laat gewoon je e-mailadres achter, zonder verplichtingen.</p>
-        </details>
-      </div>
     </div>
   </section>
 
@@ -576,6 +568,46 @@
     container.appendChild(span);
   }
 
+  function renderSteps() {
+    var container = document.getElementById('stepsRow');
+    var steps = CONFIG.steps || [];
+    // Elke stap en elk pijltje krijgt een eigen scheve hoek en zweefhoogte, cyclisch uit
+    // deze lijstjes, zodat het er los en handgetekend uitziet in plaats van keurig recht.
+    var stepTilts = [['-6deg', '-3px'], ['4deg', '5px'], ['-4deg', '2px'], ['6deg', '-4px'], ['-3deg', '4px']];
+    var arrowTilts = ['-9deg', '7deg', '-11deg', '9deg', '-7deg'];
+
+    container.innerHTML = '';
+    steps.forEach(function (text, i) {
+      if (i > 0) {
+        var arrow = document.createElement('span');
+        arrow.className = 'step-arrow';
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.style.transform = 'rotate(' + arrowTilts[(i - 1) % arrowTilts.length] + ')';
+        arrow.innerHTML = '<svg viewBox="0 0 46 24" width="38" height="20">' +
+          '<path d="M2 16 Q13 2 23 13 T42 11" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>' +
+          '<path d="M34 4 L43 11 L33 17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>';
+        container.appendChild(arrow);
+      }
+
+      var tilt = stepTilts[i % stepTilts.length];
+      var step = document.createElement('div');
+      step.className = 'step';
+      step.style.transform = 'rotate(' + tilt[0] + ') translateY(' + tilt[1] + ')';
+
+      var num = document.createElement('span');
+      num.className = 'step-num';
+      num.textContent = String(i + 1).padStart(2, '0');
+
+      var p = document.createElement('p');
+      p.textContent = text;
+
+      step.appendChild(num);
+      step.appendChild(p);
+      container.appendChild(step);
+    });
+  }
+
   function renderBrandFallback(container) {
     container.innerHTML = '';
     var eyebrow = document.createElement('p');
@@ -601,7 +633,7 @@
       renderBrandFallback(brand);
     }
 
-    document.getElementById('heroSub').textContent = CONFIG.heroSub;
+    renderSteps();
     document.getElementById('sfeerQuote').textContent = '\u201C' + CONFIG.sfeerQuote + '\u201D';
     renderMedia(document.getElementById('sfeerMedia'), CONFIG.sfeerImage, '📸 Sfeerbeeld van een quizavond');
 
