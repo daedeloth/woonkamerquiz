@@ -376,10 +376,11 @@
     ctaMainSubtext: "we sturen een berichtje als je de quiz kan spelen",
     ctaClosingLabel: "Hou me op de hoogte",
 
-    // PLACEHOLDER-video die nu op de achtergrond van de hero afspeelt (automatisch, geluidloos, in
-    // een lus). Vervang src door je eigen beeldmateriaal van de opnames zodra dat er is.
+    // Achtergrondvideo van de hero (automatisch, geluidloos, in een lus). Zet je eigen
+    // bestand in de map "videos/" naast "images/" en verwijs ernaar zoals hieronder.
+    // Hou 'm compact (zie uitleg in het antwoord) — een paar MB volstaat voor een korte lus.
     heroVideo: {
-      src: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+      src: "videos/hero.mp4"
     },
 
     // Optioneel: een logo-afbeelding i.p.v. de tekstuele titel bovenaan. Leeg laten (src: "")
@@ -583,9 +584,9 @@
         arrow.className = 'step-arrow';
         arrow.setAttribute('aria-hidden', 'true');
         arrow.style.transform = 'rotate(' + arrowTilts[(i - 1) % arrowTilts.length] + ')';
-        arrow.innerHTML = '<svg viewBox="0 0 46 24" width="38" height="20">' +
-          '<path d="M2 16 Q13 2 23 13 T42 11" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>' +
-          '<path d="M34 4 L43 11 L33 17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        arrow.innerHTML = '<svg viewBox="0 0 46 30" width="38" height="24">' +
+          '<path d="M2 17 Q21 2 40 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>' +
+          '<path d="M29 8 L41 16 L30 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
           '</svg>';
         container.appendChild(arrow);
       }
@@ -640,6 +641,7 @@
     if (CONFIG.heroVideo && CONFIG.heroVideo.src) {
       var source = document.getElementById('heroVideoSource');
       var video = document.getElementById('heroVideo');
+      video.addEventListener('error', function () { video.remove(); }, true);
       source.src = CONFIG.heroVideo.src;
       video.load();
       video.play().catch(function () { /* autoplay kan geblokkeerd worden, geen probleem */ });
