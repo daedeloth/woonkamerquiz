@@ -190,8 +190,7 @@
   /* Desktop: meer ruimte boven de inhoud, zodat logo en knop lager in beeld staan.
      Pas 110px aan om het hoger of lager te zetten. */
   @media (min-width: 900px) {
-    .hero-in { padding-top: 110px; }
-    .brand { gap: 10px; }
+    .hero-in { padding-top: 130px; gap: 16px; }
   }
 
   .brand { display: flex; flex-direction: column; align-items: center; gap: 6px; transform: rotate(-1.1deg); }
@@ -204,6 +203,11 @@
     color: var(--amber);
   }
   .eyebrow::before { content: "❄ "; color: var(--frost); }
+  /* Negatieve marge trekt de tekst over de lege rand van het logo heen, dichter tegen het logo.
+     Pas --eyebrow-pull aan: meer negatief = tekst lager / dichter bij het logo. */
+  .brand { gap: 6px; }
+  .brand.has-logo { --eyebrow-pull: -22px; gap: 0; }
+  .brand.has-logo .eyebrow { position: relative; z-index: 1; margin-bottom: var(--eyebrow-pull); }
   .hero-title { font-size: clamp(38px, 10vw, 78px); font-weight: 800; letter-spacing: -0.015em; max-width: 14ch; }
   .hero-logo-img { max-width: min(1600px, 90vw); height: auto; display: block; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
 
@@ -275,7 +279,7 @@
   }
 
   .cta-subtext {
-    margin: 4px 0 0;
+    margin: -8px 0 0;
     font-size: clamp(11px, 3vw, 12.5px);
     font-weight: 600;
     color: var(--cream-dim);
@@ -608,6 +612,8 @@
       img.alt = CONFIG.logo.alt || 'Woonkamerquiz';
       img.className = 'hero-logo-img';
       img.onerror = function () { renderBrandFallback(brand); };
+      img.onerror = function () { brand.classList.remove('has-logo'); renderBrandFallback(brand); };
+      brand.classList.add('has-logo');
       brand.appendChild(eyebrow);
       brand.appendChild(img);
     } else {
