@@ -269,8 +269,7 @@
     inset: 0;
     z-index: 0;
     background: var(--coral);
-    clip-path: polygon(12% 14%, 96% 10%, 74% 100%, 13% 74%);
-/*             linksboven, rechtsboven, rechtsonder, linksonder  (x% y%) */
+    /* clip-path wordt door JS ingesteld op basis van CONFIG.ctaShape (zie bovenaan) */
     transform: rotate(-6deg);
     transition: transform .28s cubic-bezier(.34, 1.56, .64, 1), filter .28s ease;
   }
@@ -443,6 +442,15 @@
     // Groot sfeerbeeld op de pagina. De hele sectie blijft verborgen zolang er geen
     // beeld is ingesteld of het bestand niet geladen kan worden.
     sfeerImage: { src: "images/sfeer.jpg", alt: "Sfeerbeeld van een quizavond thuis" },
+
+    // Vorm van de "Hou me op de hoogte"-knoppen. Vier hoekpunten in procent van de knop
+    // (x% = van links naar rechts, y% = van boven naar onder), in de volgorde:
+    // linksboven, rechtsboven, rechtsonder, linksonder.
+    // radius = afronding van de hoeken in pixels (0 = scherpe hoeken).
+    ctaShape: {
+      points: [[12, 14], [96, 15], [74, 100], [13, 74]],
+      radius: 10
+    },
 
     showCountdown: true,
     countdownTarget: "2026-11-11T11:11:00+01:00",
@@ -686,6 +694,38 @@
     document.getElementById('ctaMain').href = CONFIG.newsletterUrl;
     document.getElementById('ctaClosing').href = CONFIG.newsletterUrl;
     document.getElementById('navPlay').href = CONFIG.newsletterUrl;
+  })();
+
+  // Bouwt uit de vier hoekpunten van CONFIG.ctaShape een pad met afgeronde hoeken
+  // en past dat toe als clip-path op alle knopvormen.
+  (function initCtaShape() {
+    var cfg = CONFIG.ctaShape;
+    if (!cfg || !cfg.points || cfg.points.length < 3) return;
+
+    function build(w, h) {
+      var pts = cfg.points.map(function (p) { return [p[0] / 100 * w, p[1] / 100 * h]; });
+      var n = pts.length, d = '';
+      for (var i = 0; i < n; i++) {
+        var prev = pts[(i + n - 1) % n], cur = pts[i], next = pts[(i + 1) % n];
+        var d1 = Math.hypot(prev[0] - cur[0], prev[1] - cur[1]);
+        var d2 = Math.hypot(next[0] - cur[0], next[1] - cur[1]);
+        var r = Math.min(cfg.radius || 0, d1 / 2, d2 / 2);
+        var a = [cur[0] + (prev[0] - cur[0]) / d1 * r, cur[1] + (prev[1] - cur[1]) / d1 * r];
+        var b = [cur[0] + (next[0] - cur[0]) / d2 * r, cur[1] + (next[1] - cur[1]) / d2 * r];
+        d += (i === 0 ? 'M' : 'L') + a[0].toFixed(2) + ',' + a[1].toFixed(2) +
+             ' Q' + cur[0].toFixed(2) + ',' + cur[1].toFixed(2) + ' ' + b[0].toFixed(2) + ',' + b[1].toFixed(2) + ' ';
+      }
+      return 'path("' + d + 'Z")';
+    }
+
+    function apply() {
+      document.querySelectorAll('.cta-shape').forEach(function (el) {
+        if (el.offsetWidth && el.offsetHeight) el.style.clipPath = build(el.offsetWidth, el.offsetHeight);
+      });
+    }
+    apply();
+    window.addEventListener('resize', apply);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
   })();
 
   (function initScroll() {
