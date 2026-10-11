@@ -269,7 +269,8 @@
     inset: 0;
     z-index: 0;
     background: var(--coral);
-    clip-path: path("M16.97,22.37 L213.03,4.63 Q220,4 220,11 L220,75 Q220,82 213.03,81.37 L16.97,63.63 Q10,63 10,56 L10,30 Q10,23 16.97,22.37 Z");
+    clip-path: polygon(4% 26%, 96% 5%, 74% 100%, 4% 74%);
+/*             linksboven, rechtsboven, rechtsonder, linksonder  (x% y%) */
     transform: rotate(-6deg);
     transition: transform .28s cubic-bezier(.34, 1.56, .64, 1), filter .28s ease;
   }
@@ -612,7 +613,7 @@
     container.innerHTML = '';
     var eyebrow = document.createElement('p');
     eyebrow.className = 'eyebrow';
-    eyebrow.textContent = 'Quizfabriek presenteert';
+    eyebrow.textContent = 'De Quizfabriek presenteert';
     var title = document.createElement('div');
     title.className = 'hero-title';
     title.innerHTML = CONFIG.heroTitle;
@@ -625,7 +626,7 @@
     if (CONFIG.logo && CONFIG.logo.src) {
       var eyebrow = document.createElement('p');
       eyebrow.className = 'eyebrow';
-      eyebrow.textContent = 'Quizfabriek presenteert';
+      eyebrow.textContent = 'De Quizfabriek presenteert';
       var img = document.createElement('img');
       img.src = CONFIG.logo.src;
       img.alt = CONFIG.logo.alt || 'Woonkamerquiz';
