@@ -744,7 +744,7 @@
 
       // Hero-achtergrond vervaagt zacht tijdens het scrollen: volledig zichtbaar bovenaan,
       // volledig weg zodra bijna de hele hero voorbij is. Smoothstep voor een natuurlijke curve.
-      var dist = Math.max(1, hero.offsetHeight * 0.85);
+      var dist = Math.max(1, hero.offsetHeight * 0.55);
       var t = Math.max(0, Math.min(1, y / dist));
       var eased = t * t * (3 - 2 * t);
       heroBg.style.opacity = String(1 - eased);
