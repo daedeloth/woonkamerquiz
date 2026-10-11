@@ -179,7 +179,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 24px;
+    --hero-gap: 24px;
+    gap: var(--hero-gap);
     opacity: 0;
     transform: translateY(10px);
     animation: heroIn .6s ease-out .1s forwards;
@@ -190,7 +191,14 @@
   /* Desktop: meer ruimte boven de inhoud, zodat logo en knop lager in beeld staan.
      Pas 110px aan om het hoger of lager te zetten. */
   @media (min-width: 900px) {
-    .hero-in { padding-top: 130px; gap: 16px; }
+    .hero-in { padding-top: 130px; --hero-gap: 16px; }
+    /* Enkel desktop: "Quizfabriek presenteert" lager, dichter tegen het logo.
+       Meer negatief = lager. */
+    .brand.has-logo { --eyebrow-pull: -55px; gap: 0; }
+    .brand.has-logo .eyebrow { position: relative; z-index: 1; margin-bottom: var(--eyebrow-pull); }
+    /* Het blok met stappen + knop: negatief = hoger (over de lege rand van het logo),
+       positief = lager. */
+    .hero-in .action-block { --block-shift: -70px; }
   }
 
   .brand { display: flex; flex-direction: column; align-items: center; gap: 6px; transform: rotate(-1.1deg); }
@@ -203,11 +211,20 @@
     color: var(--amber);
   }
   .eyebrow::before { content: "❄ "; color: var(--frost); }
-  /* Negatieve marge trekt de tekst over de lege rand van het logo heen, dichter tegen het logo.
-     Pas --eyebrow-pull aan: meer negatief = tekst lager / dichter bij het logo. */
   .brand { gap: 6px; }
-  .brand.has-logo { --eyebrow-pull: -40px; gap: 0; }
-  .brand.has-logo .eyebrow { position: relative; z-index: 1; margin-bottom: var(--eyebrow-pull); }
+
+  /* Blok met stappen, knop en subtekst: kan over de transparante rand van het logo hangen.
+     Stel --block-shift in (ook per schermbreedte) om het hele blok hoger/lager te zetten. */
+  .action-block {
+    --block-shift: 0px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--hero-gap);
+    margin-top: var(--block-shift);
+  }
   .hero-title { font-size: clamp(38px, 10vw, 78px); font-weight: 800; letter-spacing: -0.015em; max-width: 14ch; }
   .hero-logo-img { max-width: min(1600px, 90vw); height: auto; display: block; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
 
@@ -409,7 +426,7 @@
 
     // Optioneel: een logo-afbeelding i.p.v. de tekstuele titel bovenaan. Leeg laten (src: "")
     // toont in plaats daarvan "Quizfabriek presenteert" + de titel als tekst.
-    logo: { src: "images/woonkamerquiz_logo.png", alt: "Woonkamerquiz" },
+    logo: { src: "images/woonkamerquiz_logo.png?v=2", alt: "Woonkamerquiz" },
 
     // Titel, gebruikt als er geen logo-afbeelding is ingesteld. <br> mag voor een regelafbreking.
     heroTitle: "Woonkamerquiz",
@@ -461,6 +478,7 @@
     <div class="hero-in">
       <div class="brand" id="heroBrand"></div>
 
+      <div class="action-block">
       <div class="steps-row" id="stepsRow"></div>
 
       <a class="cta" id="ctaMain" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">
@@ -468,6 +486,7 @@
         <strong id="ctaMainLabel">Hou me op de hoogte</strong>
       </a>
       <p class="cta-subtext" id="ctaMainSubtext">we mailen je zodra het kan</p>
+      </div>
 
       <div>
         <div class="countdown" id="countdown" hidden aria-hidden="true">
@@ -611,7 +630,6 @@
       img.src = CONFIG.logo.src;
       img.alt = CONFIG.logo.alt || 'Woonkamerquiz';
       img.className = 'hero-logo-img';
-      img.onerror = function () { renderBrandFallback(brand); };
       img.onerror = function () { brand.classList.remove('has-logo'); renderBrandFallback(brand); };
       brand.classList.add('has-logo');
       brand.appendChild(eyebrow);
