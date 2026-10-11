@@ -187,6 +187,13 @@
   @keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
   @media (prefers-reduced-motion: reduce) { .hero-in { opacity: 1; transform: none; animation: none; } }
 
+  /* Desktop: meer ruimte boven de inhoud, zodat logo en knop lager in beeld staan.
+     Pas 110px aan om het hoger of lager te zetten. */
+  @media (min-width: 900px) {
+    .hero-in { padding-top: 110px; }
+    .brand { gap: 10px; }
+  }
+
   .brand { display: flex; flex-direction: column; align-items: center; gap: 6px; transform: rotate(-1.1deg); }
   .eyebrow {
     font-family: "Baloo 2", ui-rounded, system-ui, sans-serif;
@@ -398,7 +405,7 @@
 
     // Optioneel: een logo-afbeelding i.p.v. de tekstuele titel bovenaan. Leeg laten (src: "")
     // toont in plaats daarvan "Quizfabriek presenteert" + de titel als tekst.
-    logo: { src: "images/woonkamerquiz_logo.png", alt: "Woonkamerquiz" },
+    logo: { src: "", alt: "Woonkamerquiz" },
 
     // Titel, gebruikt als er geen logo-afbeelding is ingesteld. <br> mag voor een regelafbreking.
     heroTitle: "Woonkamerquiz",
@@ -593,11 +600,15 @@
   (function initHero() {
     var brand = document.getElementById('heroBrand');
     if (CONFIG.logo && CONFIG.logo.src) {
+      var eyebrow = document.createElement('p');
+      eyebrow.className = 'eyebrow';
+      eyebrow.textContent = 'Quizfabriek presenteert';
       var img = document.createElement('img');
       img.src = CONFIG.logo.src;
       img.alt = CONFIG.logo.alt || 'Woonkamerquiz';
       img.className = 'hero-logo-img';
       img.onerror = function () { renderBrandFallback(brand); };
+      brand.appendChild(eyebrow);
       brand.appendChild(img);
     } else {
       renderBrandFallback(brand);
