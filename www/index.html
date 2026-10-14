@@ -415,7 +415,7 @@
     newsletterUrl: "https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&optins=3&lang=nl",
 
     ctaMainLabel: "Hou me op de<br>hoogte",
-    ctaMainSubtext: "we sturen een berichtje als je de quiz kan spelen",
+    ctaMainSubtext: "we sturen een berichtje zodra de quiz klaar is",
     ctaClosingLabel: "Hou me op de<br>hoogte",
 
     // Achtergrondvideo van de hero (automatisch, geluidloos, in een lus). Zet je eigen
@@ -462,7 +462,7 @@
 
 <nav class="topnav" id="topnav">
   <a class="topnav-link" href="https://www.quizfabriek.be" target="_blank" rel="noopener">De Quizfabriek</a>
-  <a class="topnav-link is-play" id="navPlay" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">Speel nu</a>
+  <a class="topnav-link is-play" id="navPlay" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">Speel mee</a>
   <a class="topnav-link" href="#faq">Veelgestelde vragen</a>
 </nav>
 
@@ -507,13 +507,13 @@
         <p class="countdown-label" id="countdown-caption" hidden>Verwachte lancering</p>
       </div>
 
-      <a class="scroll-hint" href="#faq">Benieuwd hoe dat eruitziet?</a>
+      <a class="scroll-hint" href="#faq">Hoe werkt dat dan?</a>
     </div>
   </header>
 
   <section id="faq">
     <div class="wrap">
-      <h2 class="section-title">Vragen?</h2>
+      <h2 class="section-title">Veelgestelde vragen...</h2>
       <div class="faq">
         <details>
           <summary>Voor wie is de woonkamerquiz?</summary>
@@ -528,8 +528,12 @@
           <p>Nee. Winters en gezellig, maar je speelt hem wanneer je zelf wil.</p>
         </details>
         <details>
-          <summary>Moet ik nu al iets betalen?</summary>
-          <p>Nee. Je laat gewoon je e-mailadres achter, zonder verplichtingen.</p>
+          <summary>Hoe lang duurt de quiz?</summary>
+          <p>Een klein uur tot anderhalf uur, afhankelijk van het aantal spelers.</p>
+        </details>
+        <details>
+          <summary>Welke onderwerpen komen in de quiz aan bod?</summary>
+          <p>De onderwerpen zijn heel erg uiteenlopend, van klassieke quizonderwerpen tot gedurfde categoriën. Op die manier weet echt iedereen wel iets!</p>
         </details>
       </div>
     </div>
@@ -554,8 +558,8 @@
 
   <section class="closing">
     <div class="wrap">
-      <h2>Wil je het weten zodra het kan?</h2>
-      <p>Laat je e-mailadres achter en wij verwittigen je zodra het zover is.</p>
+      <h2>Op de hoogte gehouden worden wanneer de quiz af is?</h2>
+      <p>Laat je e-mailadres achter, wij verwittigen je zodra het zover is.</p>
       <a class="cta ghost" id="ctaClosing" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">
         <span class="cta-shape" aria-hidden="true"></span>
         <strong id="ctaClosingLabel">Hou me op de hoogte</strong>
@@ -734,7 +738,7 @@
     var hero = document.getElementById('hero');
     var heroBg = document.getElementById('heroBg');
     var video = document.getElementById('heroVideo');
-    var fillDistance = 220; // px scroll-afstand waarover "Speel nu" geleidelijk rood wordt
+    var fillDistance = 220; // px scroll-afstand waarover "Speel mee" geleidelijk rood wordt
     var ticking = false;
 
     function update() {
