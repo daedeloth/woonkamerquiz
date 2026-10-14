@@ -285,11 +285,27 @@
     white-space: nowrap;
     transition: transform .28s cubic-bezier(.34, 1.56, .64, 1), text-shadow .28s ease;
   }
+
+  /* Zachte pulserende gloed in rust, om de aandacht te trekken.
+     Gloedkleur: crème op de koraalrode knop, koraal op de ghost-knop
+     (crème op crème tekst zou onleesbaar worden). */
+  .cta { --glow: 245, 234, 217; }
+  .cta.ghost { --glow: 232, 103, 76; }
+
+  .cta strong { animation: ctaGlow 2.4s ease-in-out infinite; }
+
+  @keyframes ctaGlow {
+    0%, 100% { text-shadow: 0 0 0 rgba(var(--glow), 0); }
+    50%      { text-shadow: 0 0 8px rgba(var(--glow), .9), 0 0 20px rgba(var(--glow), .55); }
+  }
+
   .cta:hover .cta-shape, .cta:focus-visible .cta-shape {
     transform: rotate(-6deg) scale(1.14);
     filter: drop-shadow(0 14px 30px rgba(232, 103, 76, .4));
   }
   .cta:hover strong, .cta:focus-visible strong {
+    /* de pulse stopt bij hover, anders wint de lopende animatie van de hover-gloed */
+    animation: none;
     transform: scale(1.3);
     /* zachte gloed erachter, zodat de letters leesbaar blijven zodra ze buiten de knop uitsteken */
     text-shadow: 0 0 8px var(--cream), 0 0 18px var(--cream), 0 0 30px rgba(245, 234, 217, .65);
@@ -313,6 +329,7 @@
     html { scroll-behavior: auto; }
     .cta { transition: none; }
     .cta-shape { transition: none; }
+    .cta strong { animation: none; }
     .cta:hover .cta-shape, .cta:focus-visible .cta-shape { transform: none; filter: none; }
     .cta:hover strong, .cta:focus-visible strong { transform: none; text-shadow: none; }
   }
@@ -376,6 +393,14 @@
   .closing p { color: var(--cream-dim); max-width: 42ch; margin: 0 auto 22px; }
   /* .cta is een flex-blok met vaste breedte: zonder auto-marges bleef het links hangen */
   .closing .cta { margin: 0 auto; }
+
+  /* Onderste knop met een dikke pijl links en rechts die ernaar wijzen.
+     Zelfde pijlvorm als de pijlen tussen de stappen, maar dikker. */
+  .cta-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .closing .cta-row .cta { margin: 0; }
+  .cta-arrow { color: var(--amber); flex-shrink: 0; display: inline-flex; transform: rotate(-9deg); }
+  .cta-arrow.is-right { transform: scaleX(-1) rotate(-9deg); }
+  .cta-arrow svg { display: block; overflow: visible; width: 44px; height: 30px; }
 
   footer { padding: 30px 0 46px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
   .socials { display: flex; gap: 16px; }
@@ -517,15 +542,15 @@
       <div class="faq">
         <details>
           <summary>Voor wie is de woonkamerquiz?</summary>
-          <p>Voor werkelijk iedereen! Van jong tot oud, van ervaren quizzer of nieuweling!</p>
+          <p>Voor werkelijk iedereen! Van jong tot oud, van ervaren quizzer of nieuweling.</p>
         </details>
         <details>
           <summary>Is deze quiz moeilijk?</summary>
-          <p>De quiz wil gezinnen en vriendegroepen een fijne avond bezorgen, de vragen zijn daarom bewust zeer toegankelijk gehouden.</p>
+          <p>De quiz wil gezinnen en vriendengroepen een fijne avond bezorgen, de vragen zijn daarom bewust zeer toegankelijk gehouden.</p>
         </details>
         <details>
           <summary>Welke onderwerpen komen in de quiz aan bod?</summary>
-          <p>De onderwerpen zijn heel erg uiteenlopend, van klassieke quizonderwerpen tot gedurfde categoriën. Op die manier weet echt iedereen wel iets!</p>
+          <p>De onderwerpen zijn heel erg uiteenlopend, van klassieke quizonderwerpen tot gedurfde categorieën. Zo weet iedereen wel iets!</p>
         </details>
         <details>
           <summary>Is dit enkel voor tijdens de feestdagen?</summary>
@@ -568,10 +593,27 @@
     <div class="wrap">
       <h2>Op de hoogte gehouden worden wanneer de quiz af is?</h2>
       <p>Laat je e-mailadres achter, wij verwittigen je zodra het zover is.</p>
-      <a class="cta ghost" id="ctaClosing" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">
-        <span class="cta-shape" aria-hidden="true"></span>
-        <strong id="ctaClosingLabel">Hou me op de hoogte</strong>
-      </a>
+
+      <div class="cta-row">
+        <span class="cta-arrow" aria-hidden="true">
+          <svg viewBox="0 0 46 30">
+            <path d="M2 17 Q21 2 40 16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path d="M29 8 L41 16 L30 24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+
+        <a class="cta ghost" id="ctaClosing" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">
+          <span class="cta-shape" aria-hidden="true"></span>
+          <strong id="ctaClosingLabel">Hou me op de hoogte</strong>
+        </a>
+
+        <span class="cta-arrow is-right" aria-hidden="true">
+          <svg viewBox="0 0 46 30">
+            <path d="M2 17 Q21 2 40 16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path d="M29 8 L41 16 L30 24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
     </div>
   </section>
 </main>
