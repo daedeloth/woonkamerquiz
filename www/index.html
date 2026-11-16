@@ -311,14 +311,6 @@
     text-shadow: 0 0 8px var(--cream), 0 0 18px var(--cream), 0 0 30px rgba(245, 234, 217, .65);
   }
 
-  .cta-subtext {
-    margin: -8px 0 0;
-    font-size: clamp(11px, 3vw, 12.5px);
-    font-weight: 600;
-    color: var(--cream-dim);
-    text-align: center;
-  }
-
   .cta.ghost { color: var(--cream); }
   .cta.ghost .cta-shape { background: transparent; border: 2px solid var(--panel-line); }
   .cta.ghost:hover .cta-shape, .cta.ghost:focus-visible .cta-shape { border-color: var(--coral); filter: none; }
@@ -334,7 +326,18 @@
     .cta:hover strong, .cta:focus-visible strong { transform: none; text-shadow: none; }
   }
 
-  .scroll-hint { font-size: 14px; color: var(--cream-dim); text-decoration: underline; text-underline-offset: 4px; }
+  .scroll-hint {
+    font-family: "Baloo 2", ui-rounded, system-ui, sans-serif;
+    font-size: clamp(18px, 4.8vw, 22px);
+    font-weight: 700;
+    color: var(--cream);
+    text-decoration: underline;
+    text-decoration-color: var(--amber);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    padding: 6px 4px;
+  }
+  .scroll-hint:hover, .scroll-hint:focus-visible { color: var(--amber); }
 
   /* ---------- Beeldvlak sfeersectie (verborgen tot er een beeld geladen is) ---------- */
 
@@ -431,16 +434,15 @@
 <!--
   ============================================================
   AANPASBARE INSTELLINGEN — verander hier je teksten, knoppen,
-  beelden, de achtergrondvideo, de aftelklok en de nieuwsbrief-link.
+  beelden, de achtergrondvideo, de aftelklok en de link.
   ============================================================
 -->
 <script>
   const CONFIG = {
     // Waar de "Hou me op de hoogte"-knoppen naartoe gaan.
-    newsletterUrl: "https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&optins=3&lang=nl",
+    newsletterUrl: "https://tickets.quizfabriek.be/events/90/register",
 
     ctaMainLabel: "Hou me op de<br>hoogte",
-    ctaMainSubtext: "we sturen een berichtje zodra de quiz klaar is",
     ctaClosingLabel: "Hou me op de<br>hoogte",
 
     // Achtergrondvideo van de hero (automatisch, geluidloos, in een lus). Zet je eigen
@@ -487,7 +489,7 @@
 
 <nav class="topnav" id="topnav">
   <a class="topnav-link" href="https://www.quizfabriek.be" target="_blank" rel="noopener">De Quizfabriek</a>
-  <a class="topnav-link is-play" id="navPlay" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">Speel mee</a>
+  <a class="topnav-link is-play" id="navPlay" href="https://tickets.quizfabriek.be/events/90/register">Speel mee</a>
   <a class="topnav-link" href="#faq">Veelgestelde vragen</a>
 </nav>
 
@@ -515,11 +517,10 @@
       <div class="action-block">
       <div class="steps-row" id="stepsRow"></div>
 
-      <a class="cta" id="ctaMain" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">
+      <a class="cta" id="ctaMain" href="https://tickets.quizfabriek.be/events/90/register">
         <span class="cta-shape" aria-hidden="true"></span>
         <strong id="ctaMainLabel">Hou me op de hoogte</strong>
       </a>
-      <p class="cta-subtext" id="ctaMainSubtext">we mailen je zodra het kan</p>
       </div>
 
       <div>
@@ -606,7 +607,7 @@
           </svg>
         </span>
 
-        <a class="cta ghost" id="ctaClosing" href="https://accounts.catlab.eu/newsletter?client_id=oauth259a1bba0d85568.31147117&amp;optins=3&amp;lang=nl">
+        <a class="cta ghost" id="ctaClosing" href="https://tickets.quizfabriek.be/events/90/register">
           <span class="cta-shape" aria-hidden="true"></span>
           <strong id="ctaClosingLabel">Hou me op de hoogte</strong>
         </a>
@@ -746,7 +747,6 @@
 
   (function applyConfig() {
     document.getElementById('ctaMainLabel').innerHTML = CONFIG.ctaMainLabel;
-    document.getElementById('ctaMainSubtext').textContent = CONFIG.ctaMainSubtext;
     document.getElementById('ctaClosingLabel').innerHTML = CONFIG.ctaClosingLabel;
 
     document.getElementById('ctaMain').href = CONFIG.newsletterUrl;
