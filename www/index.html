@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Woonkamerquiz — De quizavond voor in je eigen zetel</title>
-<meta name="description" content="Zet de quiz op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Binnenkort speelbaar — schrijf je nu in.">
+<meta name="description" content="Zet de quiz op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Koop je quiz en speel wanneer het jou past.">
 <meta name="theme-color" content="#2b1f1a">
 <meta name="color-scheme" content="dark">
 
@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://woonkamerquiz.be/">
 <meta property="og:site_name" content="De Quizfabriek">
 <meta property="og:title" content="Woonkamerquiz — De quizavond voor in je eigen zetel">
-<meta property="og:description" content="Zet de quiz op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Binnenkort speelbaar.">
+<meta property="og:description" content="Zet de quiz op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Koop je quiz en speel wanneer het jou past.">
 <meta property="og:image" content="https://woonkamerquiz.be/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -311,6 +311,15 @@
     text-shadow: 0 0 8px var(--cream), 0 0 18px var(--cream), 0 0 30px rgba(245, 234, 217, .65);
   }
 
+  .cta-subtext {
+    margin: -8px 0 0;
+    max-width: 34ch;
+    font-size: clamp(12px, 3.2vw, 13.5px);
+    font-weight: 600;
+    color: var(--cream-dim);
+    text-align: center;
+  }
+
   .cta.ghost { color: var(--cream); }
   .cta.ghost .cta-shape { background: transparent; border: 2px solid var(--panel-line); }
   .cta.ghost:hover .cta-shape, .cta.ghost:focus-visible .cta-shape { border-color: var(--coral); filter: none; }
@@ -439,11 +448,12 @@
 -->
 <script>
   const CONFIG = {
-    // Waar de "Hou me op de hoogte"-knoppen naartoe gaan.
+    // Waar de koopknoppen naartoe gaan.
     newsletterUrl: "https://tickets.quizfabriek.be/events/90/register",
 
-    ctaMainLabel: "Speel mee!",
-    ctaClosingLabel: "Speel mee!",
+    ctaMainLabel: "Bestel de<br>quiz",
+    ctaMainSubtext: "Activeer je link wanneer je wil. Daarna heb je 72 uur om te spelen.",
+    ctaClosingLabel: "Bestel de<br>quiz",
 
     // Achtergrondvideo van de hero (automatisch, geluidloos, in een lus). Zet je eigen
     // bestand in de map "videos/" naast "images/" en verwijs ernaar zoals hieronder.
@@ -470,7 +480,7 @@
     // beeld is ingesteld of het bestand niet geladen kan worden.
     sfeerImage: { src: "images/sfeer.jpg", alt: "Sfeerbeeld van een quizavond thuis" },
 
-    // Vorm van de "Hou me op de hoogte"-knoppen. Vier hoekpunten in procent van de knop
+    // Vorm van de koopknoppen. Vier hoekpunten in procent van de knop
     // (x% = van links naar rechts, y% = van boven naar onder), in de volgorde:
     // linksboven, rechtsboven, rechtsonder, linksonder.
     // radius = afronding van de hoeken in pixels (0 = scherpe hoeken).
@@ -489,7 +499,7 @@
 
 <nav class="topnav" id="topnav">
   <a class="topnav-link" href="https://www.quizfabriek.be" target="_blank" rel="noopener">De Quizfabriek</a>
-  <a class="topnav-link is-play" id="navPlay" href="https://tickets.quizfabriek.be/events/90/register">Speel mee</a>
+  <a class="topnav-link is-play" id="navPlay" href="https://tickets.quizfabriek.be/events/90/register">Bestel de quiz</a>
   <a class="topnav-link" href="#faq">Veelgestelde vragen</a>
 </nav>
 
@@ -519,8 +529,9 @@
 
       <a class="cta" id="ctaMain" href="https://tickets.quizfabriek.be/events/90/register">
         <span class="cta-shape" aria-hidden="true"></span>
-        <strong id="ctaMainLabel">Speel mee!</strong>
+        <strong id="ctaMainLabel">Bestel de quiz</strong>
       </a>
+      <p class="cta-subtext" id="ctaMainSubtext"></p>
       </div>
 
       <div>
@@ -530,7 +541,7 @@
           <div><b id="minutes">0</b><span>min</span></div>
           <div><b id="seconds">0</b><span>sec</span></div>
         </div>
-        <p class="countdown-label" id="countdown-caption" hidden>Verwachte lancering</p>
+        <p class="countdown-label" id="countdown-caption" hidden>Beschikbaar over</p>
       </div>
 
       <a class="scroll-hint" href="#faq">Hoe werkt dat dan?</a>
@@ -544,6 +555,14 @@
         <details>
           <summary>Voor wie is de woonkamerquiz?</summary>
           <p>Voor werkelijk iedereen! Van jong tot oud, van ervaren quizzer of nieuweling.</p>
+        </details>
+        <details>
+          <summary>Hoe werkt het kopen?</summary>
+          <p>Je koopt de quiz online en krijgt een link. Die link activeer je zelf wanneer het jou past.</p>
+        </details>
+        <details>
+          <summary>Wanneer en hoe lang kan ik spelen?</summary>
+          <p>Wanneer je wil. Je bepaalt zelf het moment waarop je de link activeert. Vanaf dan heb je 72 uur om de quiz uit te spelen.</p>
         </details>
         <details>
           <summary>Is deze quiz moeilijk?</summary>
@@ -609,7 +628,7 @@
 
         <a class="cta ghost" id="ctaClosing" href="https://tickets.quizfabriek.be/events/90/register">
           <span class="cta-shape" aria-hidden="true"></span>
-          <strong id="ctaClosingLabel">Hou me op de hoogte</strong>
+          <strong id="ctaClosingLabel">Bestel de quiz</strong>
         </a>
 
         <span class="cta-arrow is-right" aria-hidden="true">
@@ -747,6 +766,7 @@
 
   (function applyConfig() {
     document.getElementById('ctaMainLabel').innerHTML = CONFIG.ctaMainLabel;
+    document.getElementById('ctaMainSubtext').textContent = CONFIG.ctaMainSubtext;
     document.getElementById('ctaClosingLabel').innerHTML = CONFIG.ctaClosingLabel;
 
     document.getElementById('ctaMain').href = CONFIG.newsletterUrl;
