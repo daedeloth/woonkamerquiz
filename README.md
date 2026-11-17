@@ -35,12 +35,18 @@ Matomo, self-hosted on `stats.catlab.eu`, site id 27, in the `<head>` of
 
 Site 27 is shared with the ticketing site (tickets.quizfabriek.be, catlab-events,
 where Matomo is loaded through Google Tag Manager). One site means visit and
-sale land in one funnel; because both sides track cookieless with the same site
-id, a visitor going from here to checkout stays one visit. Keep both sides
-cookieless, and keep woonkamerquiz.be in the site's URL list in Matomo.
+sale land in one funnel. Keep woonkamerquiz.be in the site's URL list in Matomo.
 
-- Cookieless (`disableCookies`), so no consent banner is needed. Returning
-  visitors are counted less precisely as a result.
+- Cookies, with cross-domain linking. The ticketing site tracks with Matomo
+  cookies, and a cookie cannot be shared across domains. `setDomains` and
+  `enableCrossDomainLinking` make the tracker add the visitor ID (`pk_vid`) to
+  links to tickets.quizfabriek.be, so a visitor going from here to checkout
+  stays one visitor and one visit. The ticketing site must call the same two
+  functions in its Matomo tag (Google Tag Manager), with both domains in
+  `setDomains`, or it ignores `pk_vid`. `pk_vid` is valid for 180 seconds.
+- There is no cookie banner. That was a deliberate choice.
+- Because tickets.quizfabriek.be is in `setDomains`, clicks to the checkout are
+  no longer outlinks. The `Bestellen` event below still records them.
 - Heartbeat timer (15 s), so time on page is measured on this one-page site.
 - Events, set up in `initTracking()` at the bottom of `index.html`:
   - `Bestellen / Klik / <button>`: an order button was clicked; `<button>` is
