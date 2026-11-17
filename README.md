@@ -16,7 +16,7 @@ www/
 CLAUDE.md             notes for anyone (or anything) editing this repo
 ```
 
-The countdown runs to **11 November 2026, 11:11 Europe/Brussels**, hardcoded in
+The countdown runs to **16 November 2026, 11:11 Europe/Brussels**, hardcoded in
 `www/index.html`. It is hidden until the script fills it in (so a visitor
 without JS sees the logo and the button rather than a frozen row of zeroes) and
 hides itself again once that moment passes.

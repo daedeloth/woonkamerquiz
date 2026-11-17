@@ -1,0 +1,24 @@
+# Everyone is welcome, AI assistants and search crawlers included:
+# we want people who ask "a fun quiz to play at home" to hear about Woonkamerquiz.
+User-agent: *
+Allow: /
+
+# Named explicitly so a blanket block elsewhere (e.g. a CDN's AI-bot setting)
+# is clearly not what we intend.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+User-agent: Amazonbot
+User-agent: CCBot
+User-agent: MistralAI-User
+Allow: /
+
+Sitemap: https://woonkamerquiz.be/sitemap.xml
