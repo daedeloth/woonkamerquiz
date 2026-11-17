@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Woonkamerquiz — De quizavond voor in je eigen zetel</title>
-<meta name="description" content="Zet de quiz op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Koop je quiz en speel wanneer het jou past.">
+<title>Woonkamerquiz — Kerstquiz of oudejaarsquiz voor in je eigen zetel</title>
+<meta name="description" content="Kant-en-klare kerstquiz of oudejaarsquiz voor thuis: zet de quiz op je tv, neem je gsm erbij en speel tegen familie of vrienden. Vanaf €6, nooit meer dan €40.">
 <meta name="theme-color" content="#2b1f1a">
 <meta name="color-scheme" content="dark">
 
@@ -58,10 +58,45 @@
         "audienceType": "Gezinnen en vriendengroepen"
       },
       "offers": {
-        "@type": "Offer",
+        "@type": "AggregateOffer",
         "url": "https://tickets.quizfabriek.be/events/90/register",
         "availability": "https://schema.org/InStock",
         "priceCurrency": "EUR",
+        "lowPrice": "6.00",
+        "highPrice": "40.00",
+        "offerCount": 5,
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "1 speler",
+            "price": "6.00",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Tot 2 spelers of ploegen",
+            "price": "10.00",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Tot 5 spelers of ploegen",
+            "price": "20.00",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Tot 10 spelers of ploegen",
+            "price": "30.00",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Tot 20 spelers of ploegen",
+            "price": "40.00",
+            "priceCurrency": "EUR"
+          }
+        ],
         "seller": {
           "@id": "https://www.quizfabriek.be/#org"
         }
@@ -85,6 +120,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Je koopt de quiz online en krijgt een link. Die link activeer je zelf wanneer het jou past."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wat kost de quiz?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De prijs hangt af van het aantal antwoordtoestellen: 1 speler kost €6, tot 2 spelers of ploegen €10, tot 5 €20, tot 10 €30 en tot 20 €40. Meer dan €40 betaal je dus nooit."
           }
         },
         {
@@ -116,7 +159,7 @@
           "name": "Is dit enkel voor tijdens de feestdagen?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Nee. Dit spel is winters en gezellig, maar je speelt wanneer je maar wil."
+            "text": "Nee. Het is een ideale kerstquiz of oudejaarsquiz, winters en gezellig, maar je speelt wanneer je maar wil."
           }
         },
         {
@@ -164,7 +207,7 @@
 <meta property="og:url" content="https://woonkamerquiz.be/">
 <meta property="og:site_name" content="De Quizfabriek">
 <meta property="og:title" content="Woonkamerquiz — De quizavond voor in je eigen zetel">
-<meta property="og:description" content="Zet de quiz op je tv, neem je gsm erbij en speel tegen je vrienden of familie. Koop je quiz en speel wanneer het jou past.">
+<meta property="og:description" content="Kant-en-klare kerstquiz of oudejaarsquiz voor thuis: zet de quiz op je tv, neem je gsm erbij en speel tegen familie of vrienden. Vanaf €6, nooit meer dan €40.">
 <meta property="og:image" content="https://woonkamerquiz.be/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -548,6 +591,8 @@
   .faq summary::after { content: "+"; font-family: "Baloo 2", sans-serif; font-size: 20px; color: var(--amber); flex-shrink: 0; transition: transform .15s ease; }
   .faq details[open] summary::after { transform: rotate(45deg); }
   .faq p { color: var(--cream-dim); margin: 10px 0 0; max-width: 56ch; }
+  .faq .price-list { color: var(--cream-dim); margin: 10px 0 0; padding-left: 20px; max-width: 56ch; }
+  .faq .price-list b { color: var(--cream); }
 
   .closing { text-align: center; }
   .closing h2 { margin-bottom: 10px; font-size: clamp(26px, 5vw, 34px); }
@@ -605,7 +650,7 @@
     newsletterUrl: "https://tickets.quizfabriek.be/events/90/register",
 
     ctaMainLabel: "Bestel de<br>quiz",
-    ctaMainSubtext: "Activeer je link wanneer je wil. Daarna heb je 72 uur om te spelen.",
+    ctaMainSubtext: "Vanaf €6, nooit meer dan €40. Activeer je link wanneer je wil, daarna heb je 72 uur om te spelen.",
     ctaClosingLabel: "Bestel de<br>quiz",
 
     // Achtergrondvideo van de hero (automatisch, geluidloos, in een lus). Zet je eigen
@@ -642,7 +687,7 @@
       radius: 10
     },
 
-    showCountdown: true,
+    showCountdown: false,
     countdownTarget: "2026-11-16T11:11:00+01:00",
 
     // Extra sfeerbeelden onderaan, optioneel. Leeg laten (photos: []) verbergt de sectie.
@@ -722,6 +767,18 @@
           <p>Je koopt de quiz online en krijgt een link. Die link activeer je zelf wanneer het jou past.</p>
         </details>
         <details>
+          <summary>Wat kost de quiz?</summary>
+          <p>De prijs hangt af van het aantal antwoordtoestellen (spelers of ploegen):</p>
+          <ul class="price-list">
+            <li>1 speler: <b>€6</b></li>
+            <li>Tot 2 spelers of ploegen: <b>€10</b></li>
+            <li>Tot 5 spelers of ploegen: <b>€20</b></li>
+            <li>Tot 10 spelers of ploegen: <b>€30</b></li>
+            <li>Tot 20 spelers of ploegen: <b>€40</b></li>
+          </ul>
+          <p>Meer dan €40 betaal je dus nooit, ook niet met twintig ploegen.</p>
+        </details>
+        <details>
           <summary>Wanneer en hoe lang kan ik spelen?</summary>
           <p>Wanneer je wil. Je bepaalt zelf het moment waarop je de link activeert. Vanaf dan heb je 72 uur om de quiz uit te spelen.</p>
         </details>
@@ -735,7 +792,7 @@
         </details>
         <details>
           <summary>Is dit enkel voor tijdens de feestdagen?</summary>
-          <p>Nee. Dit spel is winters en gezellig, maar je speelt wanneer je maar wil.</p>
+          <p>Nee. Het is een ideale kerstquiz of oudejaarsquiz, winters en gezellig, maar je speelt wanneer je maar wil.</p>
         </details>
         <details>
           <summary>Hoe lang duurt de quiz?</summary>
