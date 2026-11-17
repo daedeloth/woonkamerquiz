@@ -944,8 +944,9 @@
     }
 
     // Campaign params from the landing URL (e.g. an ad) are forwarded as-is.
-    // Without them the checkout sees woonkamerquiz.be as the source, and
-    // utm_content names the button, unless an ad already set it.
+    // Never add our own: both sites share Matomo site 27 and are matched
+    // cookieless into one visit, and a new campaign on the checkout would make
+    // Matomo start a second visit. The Bestellen event names the button.
     var incoming = {};
     var query = window.location.search.replace(/^\?/, '');
     if (query) {
@@ -956,24 +957,17 @@
       });
     }
 
-    function checkoutUrl(position) {
-      var params = {};
-      var key;
-      for (key in incoming) params[key] = incoming[key];
-      if (!params.utm_source) {
-        params.utm_source = 'woonkamerquiz.be';
-        params.utm_medium = 'website';
-      }
-      if (!params.utm_content) params.utm_content = position;
+    function checkoutUrl() {
       var parts = [];
-      for (key in params) parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+      for (var key in incoming) parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(incoming[key]));
+      if (!parts.length) return CONFIG.newsletterUrl;
       return CONFIG.newsletterUrl + (CONFIG.newsletterUrl.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
     }
 
     [['navPlay', 'topbalk'], ['ctaMain', 'hero'], ['ctaClosing', 'onderaan']].forEach(function (cta) {
       var link = document.getElementById(cta[0]);
       if (!link) return;
-      link.href = checkoutUrl(cta[1]);
+      link.href = checkoutUrl();
       link.addEventListener('click', function () { track('Bestellen', 'Klik', cta[1]); });
     });
 
