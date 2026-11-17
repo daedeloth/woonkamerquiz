@@ -30,8 +30,14 @@ python3 -m http.server 8000 --directory www
 
 ## Analytics
 
-Matomo, self-hosted on `stats.catlab.eu`, site id 41, in the `<head>` of
+Matomo, self-hosted on `stats.catlab.eu`, site id 27, in the `<head>` of
 `www/index.html`. It is the one third-party request the page makes.
+
+Site 27 is shared with the ticketing site (tickets.quizfabriek.be, catlab-events,
+where Matomo is loaded through Google Tag Manager). One site means visit and
+sale land in one funnel; because both sides track cookieless with the same site
+id, a visitor going from here to checkout stays one visit. Keep both sides
+cookieless, and keep woonkamerquiz.be in the site's URL list in Matomo.
 
 - Cookieless (`disableCookies`), so no consent banner is needed. Returning
   visitors are counted less precisely as a result.

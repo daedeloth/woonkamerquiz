@@ -39,7 +39,8 @@ www/            everything served, uploaded verbatim by the Pages workflow
 - One file. CSS and JS stay inline in `index.html` -- do not split them out or
   add a bundler.
 - No dependencies, no frameworks, no web fonts. The one external request is the
-  Matomo tracker on `stats.catlab.eu` (site id 41).
+  Matomo tracker on `stats.catlab.eu` (site id 27, shared with the ticketing
+  site; see `README.md`).
 - Matomo runs cookieless (`disableCookies`); keep it that way unless a consent
   banner is added. Order-button and FAQ events and the UTM pass-through to the
   checkout live in `initTracking()`; see the Analytics section of `README.md`.
