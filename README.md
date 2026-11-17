@@ -33,6 +33,20 @@ python3 -m http.server 8000 --directory www
 Matomo, self-hosted on `stats.catlab.eu`, site id 41, in the `<head>` of
 `www/index.html`. It is the one third-party request the page makes.
 
+- Cookieless (`disableCookies`), so no consent banner is needed. Returning
+  visitors are counted less precisely as a result.
+- Heartbeat timer (15 s), so time on page is measured on this one-page site.
+- Events, set up in `initTracking()` at the bottom of `index.html`:
+  - `Bestellen / Klik / <button>`: an order button was clicked; `<button>` is
+    `topbalk`, `hero` or `onderaan`. Make this event a goal in Matomo.
+  - `FAQ / Open / <question>`: a FAQ question was opened.
+- The order links pass the visitor's `utm_*` parameters on to the checkout
+  (tickets.quizfabriek.be). Without them the checkout gets
+  `utm_source=woonkamerquiz.be&utm_medium=website`, and `utm_content` names the
+  button unless the incoming link already set it.
+- `utm_source` and `utm_medium` are only reported if the
+  MarketingCampaignsReporting plugin is enabled in Matomo.
+
 ## Deploy
 
 GitHub Actions publishes `www/` to GitHub Pages on every push to `main`

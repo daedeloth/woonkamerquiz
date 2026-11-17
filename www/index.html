@@ -424,8 +424,12 @@
 <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];
-  _paq.push(["setExcludedQueryParams", ["_ga","_gac","utm_content"]]);
+  _paq.push(["setExcludedQueryParams", ["_ga","_gac"]]);
+  // Cookieless: no consent banner needed. Must come before trackPageView.
+  _paq.push(['disableCookies']);
   _paq.push(['trackPageView']);
+  // One-page site: without heartbeats every visit reads as 0 seconds.
+  _paq.push(['enableHeartBeatTimer', 15]);
   _paq.push(['enableLinkTracking']);
   (function() {
     var u="//stats.catlab.eu/";
@@ -772,6 +776,58 @@
     document.getElementById('ctaMain').href = CONFIG.newsletterUrl;
     document.getElementById('ctaClosing').href = CONFIG.newsletterUrl;
     document.getElementById('navPlay').href = CONFIG.newsletterUrl;
+  })();
+
+  // Analytics: which order button gets clicked, which FAQ questions get opened,
+  // and the visitor's campaign passed on to the checkout so the ticketing site
+  // can attribute the sale. Events only; goals are configured in Matomo itself.
+  (function initTracking() {
+    function track(category, action, name) {
+      window._paq = window._paq || [];
+      window._paq.push(['trackEvent', category, action, name]);
+    }
+
+    // Campaign params from the landing URL (e.g. an ad) are forwarded as-is.
+    // Without them the checkout sees woonkamerquiz.be as the source, and
+    // utm_content names the button, unless an ad already set it.
+    var incoming = {};
+    var query = window.location.search.replace(/^\?/, '');
+    if (query) {
+      query.split('&').forEach(function (pair) {
+        var kv = pair.split('=');
+        var key = decodeURIComponent(kv[0] || '');
+        if (/^utm_/.test(key) && kv[1]) incoming[key] = decodeURIComponent(kv[1].replace(/\+/g, ' '));
+      });
+    }
+
+    function checkoutUrl(position) {
+      var params = {};
+      var key;
+      for (key in incoming) params[key] = incoming[key];
+      if (!params.utm_source) {
+        params.utm_source = 'woonkamerquiz.be';
+        params.utm_medium = 'website';
+      }
+      if (!params.utm_content) params.utm_content = position;
+      var parts = [];
+      for (key in params) parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+      return CONFIG.newsletterUrl + (CONFIG.newsletterUrl.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
+    }
+
+    [['navPlay', 'topbalk'], ['ctaMain', 'hero'], ['ctaClosing', 'onderaan']].forEach(function (cta) {
+      var link = document.getElementById(cta[0]);
+      if (!link) return;
+      link.href = checkoutUrl(cta[1]);
+      link.addEventListener('click', function () { track('Bestellen', 'Klik', cta[1]); });
+    });
+
+    document.querySelectorAll('.faq details').forEach(function (item) {
+      item.addEventListener('toggle', function () {
+        if (!item.open) return;
+        var summary = item.querySelector('summary');
+        track('FAQ', 'Open', summary ? summary.textContent.trim() : '');
+      });
+    });
   })();
 
   // Bouwt uit de vier hoekpunten van CONFIG.ctaShape een pad met afgeronde hoeken
