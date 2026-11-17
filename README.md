@@ -10,6 +10,9 @@ www/
   logo.svg            De Quizfabriek, viewBox trimmed to the artwork
   og.png              1200x630 share preview
   apple-touch-icon.png
+  favicon.ico         48/32/16 px, same shield as tickets.quizfabriek.be
+  favicon-32x32.png
+  favicon-16x16.png
   CNAME               custom domain, must ship inside the Pages artifact
 .github/workflows/
   pages.yml           publishes www/ to GitHub Pages on push to main
