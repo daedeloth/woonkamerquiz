@@ -574,8 +574,11 @@
 <script>
   var _paq = window._paq = window._paq || [];
   _paq.push(["setExcludedQueryParams", ["_ga","_gac"]]);
-  // Cookieless: no consent banner needed. Must come before trackPageView.
-  _paq.push(['disableCookies']);
+  // Cookies plus cross-domain linking: links to the checkout carry the visitor
+  // ID (pk_vid), so the click and the checkout stay one visit. The ticketing
+  // site must also call setDomains and enableCrossDomainLinking (GTM tag).
+  _paq.push(['setDomains', ['woonkamerquiz.be', '*.woonkamerquiz.be', 'tickets.quizfabriek.be']]);
+  _paq.push(['enableCrossDomainLinking']);
   _paq.push(['trackPageView']);
   // One-page site: without heartbeats every visit reads as 0 seconds.
   _paq.push(['enableHeartBeatTimer', 15]);
