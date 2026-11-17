@@ -46,10 +46,12 @@ cookieless, and keep woonkamerquiz.be in the site's URL list in Matomo.
   - `Bestellen / Klik / <button>`: an order button was clicked; `<button>` is
     `topbalk`, `hero` or `onderaan`. Make this event a goal in Matomo.
   - `FAQ / Open / <question>`: a FAQ question was opened.
-- The order links pass the visitor's `utm_*` parameters on to the checkout
-  (tickets.quizfabriek.be). Without them the checkout gets
-  `utm_source=woonkamerquiz.be&utm_medium=website`, and `utm_content` names the
-  button unless the incoming link already set it.
+- The order links pass the visitor's incoming `utm_*` parameters on to the
+  checkout (tickets.quizfabriek.be) unchanged, and add none of their own. A
+  visitor without a campaign goes to the plain order URL. Do not tag these
+  links: Matomo starts a new visit when the campaign changes, so a tag added
+  here splits one visit into two and replaces the real source (direct, search,
+  an ad) with woonkamerquiz.be. The `Bestellen` event already names the button.
 - `utm_source` and `utm_medium` are only reported if the
   MarketingCampaignsReporting plugin is enabled in Matomo.
 
