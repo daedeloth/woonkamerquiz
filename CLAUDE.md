@@ -44,7 +44,7 @@ www/            everything served, uploaded verbatim by the Pages workflow
   it.
 - Dutch (`nl-BE`) is the page language. Copy is Dutch; code and comments are
   English.
-- The countdown target (11 November 2026, 11:11 Europe/Brussels) is hardcoded in
+- The countdown target (16 November 2026, 11:11 Europe/Brussels) is hardcoded in
   `www/index.html`. It hides itself until JS fills it in, so a visitor without
   JS sees the logo and button rather than a row of zeroes -- keep that
   behaviour.
@@ -55,4 +55,24 @@ Push to `main`; the workflow publishes `www/`. Never commit anything to `www/`
 that should not be public -- it is served verbatim, and the repository is public
 because Pages requires it on this plan.
 
+The whole repository is public, not just `www/`. Launch plans, targets, budgets,
+unannounced prices and other business notes do not belong anywhere in it; they
+live in a separate private repository.
+
 See `README.md` for DNS and the apex/www redirect.
+
+## Discoverability (search engines and AI assistants)
+
+The page is meant to be found and recommended by AI assistants as well as search
+engines. Four places describe the product; when the copy changes, update all of
+them together:
+
+- the FAQ in `www/index.html`
+- the JSON-LD block in the `<head>` (its FAQPage mirrors the FAQ word for word)
+- the static `<ol>` inside `#stepsRow`, which mirrors `CONFIG.steps` for
+  visitors that do not run JS
+- `www/llms.txt`, a plain-language summary for AI agents
+
+`www/robots.txt` allows every crawler, AI bots included, on purpose. Cloudflare
+fronts the domain and can block AI crawlers on its own (Security > Bots, "Block
+AI bots" / managed robots.txt); keep those off, or this file is overridden.

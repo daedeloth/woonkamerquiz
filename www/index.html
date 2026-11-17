@@ -8,6 +8,155 @@
 <meta name="theme-color" content="#2b1f1a">
 <meta name="color-scheme" content="dark">
 
+<link rel="canonical" href="https://woonkamerquiz.be/">
+<link rel="alternate" type="text/markdown" href="/llms.txt" title="Woonkamerquiz for AI assistants">
+
+<!-- Structured data for search engines and AI assistants. The FAQ part mirrors
+     the FAQ section below; update both together. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.quizfabriek.be/#org",
+      "name": "De Quizfabriek",
+      "url": "https://www.quizfabriek.be",
+      "foundingDate": "2015",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Gent",
+        "addressCountry": "BE"
+      },
+      "sameAs": [
+        "https://www.facebook.com/quizfabriek",
+        "https://www.instagram.com/quizfabriek"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://woonkamerquiz.be/#website",
+      "url": "https://woonkamerquiz.be/",
+      "name": "Woonkamerquiz",
+      "inLanguage": "nl-BE",
+      "publisher": {
+        "@id": "https://www.quizfabriek.be/#org"
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://woonkamerquiz.be/#product",
+      "name": "Woonkamerquiz",
+      "description": "Kant-en-klare quizavond voor thuis: de quiz speelt op je tv of laptop, elke speler of ploeg antwoordt met de eigen gsm. Ongeveer een uur, 1 tot 20 spelers of ploegen, 72 uur speeltijd na activatie.",
+      "image": "https://woonkamerquiz.be/og.png",
+      "brand": {
+        "@id": "https://www.quizfabriek.be/#org"
+      },
+      "inLanguage": "nl-BE",
+      "audience": {
+        "@type": "PeopleAudience",
+        "audienceType": "Gezinnen en vriendengroepen"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://tickets.quizfabriek.be/events/90/register",
+        "availability": "https://schema.org/InStock",
+        "priceCurrency": "EUR",
+        "seller": {
+          "@id": "https://www.quizfabriek.be/#org"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://woonkamerquiz.be/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Voor wie is de woonkamerquiz?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Voor werkelijk iedereen! Van jong tot oud, van ervaren quizzer of nieuweling."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hoe werkt het kopen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Je koopt de quiz online en krijgt een link. Die link activeer je zelf wanneer het jou past."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wanneer en hoe lang kan ik spelen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Wanneer je wil. Je bepaalt zelf het moment waarop je de link activeert. Vanaf dan heb je 72 uur om de quiz uit te spelen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is deze quiz moeilijk?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De quiz wil gezinnen en vriendengroepen een fijne avond bezorgen, de vragen zijn daarom bewust zeer toegankelijk gehouden."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Welke onderwerpen komen in de quiz aan bod?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De onderwerpen zijn heel erg uiteenlopend, van klassieke quizonderwerpen tot onverwachte thema's. Zo weet iedereen wel iets!"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is dit enkel voor tijdens de feestdagen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nee. Dit spel is winters en gezellig, maar je speelt wanneer je maar wil."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hoe lang duurt de quiz?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ongeveer een uurtje, maar als jullie met weinig spelers zijn en/of snel antwoorden kan de quiz iets sneller gedaan zijn."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Met hoeveel kan ik deze quiz spelen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De quiz kan alleen of met maximaal twintig antwoordtoestellen gespeeld worden. Je kan kiezen om met twintig spelers te spelen of ploegjes vormen. Als je in ploegjes speelt, kan je dus maximaal twintig ploegjes laten spelen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan ik de quiz pauzeren?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zeker, er is een pauzeknop zodat je de quiz te allen tijde kan onderbreken. Bijvoorbeeld om het dessert te eten!"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ik ben slecht met technologie, ga ik de quiz wel kunnen opstarten?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tuurlijk! Al wat je nodig hebt is een laptop om de quiz op af te spelen, en per speler (of team) een smartphone om mee te antwoorden."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
 <link rel="icon" href="/logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
@@ -525,7 +674,15 @@
       <div class="brand" id="heroBrand"></div>
 
       <div class="action-block">
-      <div class="steps-row" id="stepsRow"></div>
+      <!-- Static copy of CONFIG.steps for crawlers and AI agents that do not run JS;
+           renderSteps() replaces it on load. Keep the two in sync. -->
+      <div class="steps-row" id="stepsRow">
+        <ol>
+          <li>Open de quiz op je tv of laptop</li>
+          <li>Scan per ploeg de QR-code op je gsm</li>
+          <li>Speel de quiz</li>
+        </ol>
+      </div>
 
       <a class="cta" id="ctaMain" href="https://tickets.quizfabriek.be/events/90/register">
         <span class="cta-shape" aria-hidden="true"></span>
@@ -584,7 +741,6 @@
           <summary>Met hoeveel kan ik deze quiz spelen?</summary>
           <p>De quiz kan alleen of met maximaal twintig antwoordtoestellen gespeeld worden. Je kan kiezen om met twintig spelers te spelen of ploegjes vormen. Als je in ploegjes speelt, kan je dus maximaal twintig ploegjes laten spelen.</p>
         </details>
-        <details>
         <details>
           <summary>Kan ik de quiz pauzeren?</summary>
           <p>Zeker, er is een pauzeknop zodat je de quiz te allen tijde kan onderbreken. Bijvoorbeeld om het dessert te eten!</p>
