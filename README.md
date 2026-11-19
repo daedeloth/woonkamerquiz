@@ -10,6 +10,9 @@ www/
   logo.svg            De Quizfabriek, viewBox trimmed to the artwork
   og.png              1200x630 share preview
   apple-touch-icon.png
+  favicon.ico         48/32/16 px, same shield as tickets.quizfabriek.be
+  favicon-32x32.png
+  favicon-16x16.png
   CNAME               custom domain, must ship inside the Pages artifact
 .github/workflows/
   pages.yml           publishes www/ to GitHub Pages on push to main
@@ -33,23 +36,31 @@ python3 -m http.server 8000 --directory www
 Matomo, self-hosted on `stats.catlab.eu`, site id 27, in the `<head>` of
 `www/index.html`. It is the one third-party request the page makes.
 
-Site 27 is shared with the ticketing site (tickets.quizfabriek.be, catlab-events,
+Site 27 is shared with the ticketing site (www.quizfabriek.be, catlab-events,
 where Matomo is loaded through Google Tag Manager). One site means visit and
-sale land in one funnel; because both sides track cookieless with the same site
-id, a visitor going from here to checkout stays one visit. Keep both sides
-cookieless, and keep woonkamerquiz.be in the site's URL list in Matomo.
+sale land in one funnel. Keep woonkamerquiz.be in the site's URL list in Matomo.
 
-- Cookieless (`disableCookies`), so no consent banner is needed. Returning
-  visitors are counted less precisely as a result.
+- Cookies, with cross-domain linking. The ticketing site tracks with Matomo
+  cookies, and a cookie cannot be shared across domains. `setDomains` and
+  `enableCrossDomainLinking` make the tracker add the visitor ID (`pk_vid`) to
+  links to www.quizfabriek.be, so a visitor going from here to checkout
+  stays one visitor and one visit. The ticketing site must call the same two
+  functions in its Matomo tag (Google Tag Manager), with both domains in
+  `setDomains`, or it ignores `pk_vid`. `pk_vid` is valid for 180 seconds.
+- There is no cookie banner. That was a deliberate choice.
+- Because www.quizfabriek.be is in `setDomains`, clicks to the checkout are
+  no longer outlinks. The `Bestellen` event below still records them.
 - Heartbeat timer (15 s), so time on page is measured on this one-page site.
 - Events, set up in `initTracking()` at the bottom of `index.html`:
   - `Bestellen / Klik / <button>`: an order button was clicked; `<button>` is
     `topbalk`, `hero` or `onderaan`. Make this event a goal in Matomo.
   - `FAQ / Open / <question>`: a FAQ question was opened.
-- The order links pass the visitor's `utm_*` parameters on to the checkout
-  (tickets.quizfabriek.be). Without them the checkout gets
-  `utm_source=woonkamerquiz.be&utm_medium=website`, and `utm_content` names the
-  button unless the incoming link already set it.
+- The order links pass the visitor's incoming `utm_*` parameters on to the
+  checkout (www.quizfabriek.be) unchanged, and add none of their own. A
+  visitor without a campaign goes to the plain order URL. Do not tag these
+  links: Matomo starts a new visit when the campaign changes, so a tag added
+  here splits one visit into two and replaces the real source (direct, search,
+  an ad) with woonkamerquiz.be. The `Bestellen` event already names the button.
 - `utm_source` and `utm_medium` are only reported if the
   MarketingCampaignsReporting plugin is enabled in Matomo.
 

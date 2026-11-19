@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Woonkamerquiz — Kerstquiz of oudejaarsquiz voor in je eigen zetel</title>
+<title>Woonkamerquiz: kerstquiz of oudejaarsquiz voor in je eigen zetel</title>
 <meta name="description" content="Kant-en-klare kerstquiz of oudejaarsquiz voor thuis: zet de quiz op je tv, neem je gsm erbij en speel tegen familie of vrienden. Vanaf €2 per persoon.">
 <meta name="theme-color" content="#2b1f1a">
 <meta name="color-scheme" content="dark">
@@ -48,7 +48,7 @@
       "@id": "https://woonkamerquiz.be/#product",
       "name": "Woonkamerquiz",
       "description": "Kant-en-klare quizavond voor thuis: de quiz speelt op je tv of laptop, elke speler of ploeg antwoordt met de eigen gsm. Ongeveer een uur, 1 tot 20 spelers of ploegen, 72 uur speeltijd na activatie.",
-      "image": "https://woonkamerquiz.be/og.png",
+      "image": "https://woonkamerquiz.be/images/woonkamerquiz-thumbnail.png",
       "brand": {
         "@id": "https://www.quizfabriek.be/#org"
       },
@@ -59,7 +59,7 @@
       },
       "offers": {
         "@type": "Offer",
-        "url": "https://tickets.quizfabriek.be/events/90/register",
+        "url": "https://www.quizfabriek.be/events/90/register",
         "availability": "https://schema.org/InStock",
         "priceCurrency": "EUR",
         "seller": {
@@ -165,15 +165,17 @@
 }
 </script>
 
-<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://woonkamerquiz.be/">
 <meta property="og:site_name" content="De Quizfabriek">
-<meta property="og:title" content="Woonkamerquiz — De quizavond voor in je eigen zetel">
+<meta property="og:title" content="Woonkamerquiz: de quizavond voor in je eigen zetel">
 <meta property="og:description" content="Kant-en-klare kerstquiz of oudejaarsquiz voor thuis: zet de quiz op je tv, neem je gsm erbij en speel tegen familie of vrienden. Vanaf €2 per persoon.">
-<meta property="og:image" content="https://woonkamerquiz.be/og.png">
+<meta property="og:image" content="https://woonkamerquiz.be/images/woonkamerquiz-thumbnail.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="nl_BE">
@@ -582,8 +584,11 @@
 <script>
   var _paq = window._paq = window._paq || [];
   _paq.push(["setExcludedQueryParams", ["_ga","_gac"]]);
-  // Cookieless: no consent banner needed. Must come before trackPageView.
-  _paq.push(['disableCookies']);
+  // Cookies plus cross-domain linking: links to the checkout carry the visitor
+  // ID (pk_vid), so the click and the checkout stay one visit. The ticketing
+  // site must also call setDomains and enableCrossDomainLinking (GTM tag).
+  _paq.push(['setDomains', ['woonkamerquiz.be', '*.woonkamerquiz.be', 'www.quizfabriek.be']]);
+  _paq.push(['enableCrossDomainLinking']);
   _paq.push(['trackPageView']);
   // One-page site: without heartbeats every visit reads as 0 seconds.
   _paq.push(['enableHeartBeatTimer', 15]);
@@ -610,10 +615,10 @@
 <script>
   const CONFIG = {
     // Waar de koopknoppen naartoe gaan.
-    newsletterUrl: "https://tickets.quizfabriek.be/events/90/register",
+    newsletterUrl: "https://www.quizfabriek.be/events/90/register",
 
     ctaMainLabel: "Bestel de<br>quiz",
-    ctaMainSubtext: "Vanaf €2 per persoon. Activeer je link wanneer je wil, daarna heb je 72 uur om te spelen.",
+    ctaMainSubtext: "Vanaf €2 per persoon. Je krijgt een link, die je zelf activeert wanneer het jou past.",
     ctaClosingLabel: "Bestel de<br>quiz",
 
     // Achtergrondvideo van de hero (automatisch, geluidloos, in een lus). Zet je eigen
@@ -660,7 +665,7 @@
 
 <nav class="topnav" id="topnav">
   <a class="topnav-link" href="https://www.quizfabriek.be" target="_blank" rel="noopener">De Quizfabriek</a>
-  <a class="topnav-link is-play" id="navPlay" href="https://tickets.quizfabriek.be/events/90/register">Bestel de quiz</a>
+  <a class="topnav-link is-play" id="navPlay" href="https://www.quizfabriek.be/events/90/register">Bestel de quiz</a>
   <a class="topnav-link" href="#faq">Veelgestelde vragen</a>
 </nav>
 
@@ -696,7 +701,7 @@
         </ol>
       </div>
 
-      <a class="cta" id="ctaMain" href="https://tickets.quizfabriek.be/events/90/register">
+      <a class="cta" id="ctaMain" href="https://www.quizfabriek.be/events/90/register">
         <span class="cta-shape" aria-hidden="true"></span>
         <strong id="ctaMainLabel">Bestel de quiz</strong>
       </a>
@@ -798,7 +803,7 @@
           </svg>
         </span>
 
-        <a class="cta ghost" id="ctaClosing" href="https://tickets.quizfabriek.be/events/90/register">
+        <a class="cta ghost" id="ctaClosing" href="https://www.quizfabriek.be/events/90/register">
           <span class="cta-shape" aria-hidden="true"></span>
           <strong id="ctaClosingLabel">Bestel de quiz</strong>
         </a>
@@ -956,8 +961,9 @@
     }
 
     // Campaign params from the landing URL (e.g. an ad) are forwarded as-is.
-    // Without them the checkout sees woonkamerquiz.be as the source, and
-    // utm_content names the button, unless an ad already set it.
+    // Never add our own: both sites share Matomo site 27 and are matched
+    // cookieless into one visit, and a new campaign on the checkout would make
+    // Matomo start a second visit. The Bestellen event names the button.
     var incoming = {};
     var query = window.location.search.replace(/^\?/, '');
     if (query) {
@@ -968,24 +974,17 @@
       });
     }
 
-    function checkoutUrl(position) {
-      var params = {};
-      var key;
-      for (key in incoming) params[key] = incoming[key];
-      if (!params.utm_source) {
-        params.utm_source = 'woonkamerquiz.be';
-        params.utm_medium = 'website';
-      }
-      if (!params.utm_content) params.utm_content = position;
+    function checkoutUrl() {
       var parts = [];
-      for (key in params) parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+      for (var key in incoming) parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(incoming[key]));
+      if (!parts.length) return CONFIG.newsletterUrl;
       return CONFIG.newsletterUrl + (CONFIG.newsletterUrl.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
     }
 
     [['navPlay', 'topbalk'], ['ctaMain', 'hero'], ['ctaClosing', 'onderaan']].forEach(function (cta) {
       var link = document.getElementById(cta[0]);
       if (!link) return;
-      link.href = checkoutUrl(cta[1]);
+      link.href = checkoutUrl();
       link.addEventListener('click', function () { track('Bestellen', 'Klik', cta[1]); });
     });
 
